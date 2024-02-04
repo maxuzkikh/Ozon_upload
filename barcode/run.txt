@@ -1,4 +1,5 @@
 python C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\print.py
+python C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\close_acrobat.py
  
 
 

@@ -3,6 +3,8 @@ import subprocess
 import os
 import winreg
 import win32print
+import time
+import pygetwindow as gw
 
 def get_acrobat_path():
     try:
@@ -23,65 +25,75 @@ def get_acrobat_path():
 
 def set_number_of_copies(printer_name, num_copies):
     try:
-        h_printer = win32print.OpenPrinter(printer_name)
+        h_printer = win32print.OpenPrinter(printer_name, {'DesiredAccess': win32print.PRINTER_ALL_ACCESS})
         defaults = win32print.GetPrinter(h_printer, 2)
         defaults['pDevMode'].Copies = num_copies
         win32print.SetPrinter(h_printer, 2, defaults, 0)
         win32print.ClosePrinter(h_printer)
     except Exception as e:
-        print(f"Error: Unable to set number of copies. {e}")
+        print(f"Error: Unable to set the number of copies. {e}")
 
-def print_pdfs_from_excel(excel_file_path, printer_name='Xprinter XP-365B'):
-    acrobat_path = get_acrobat_path()
+def close_acrobat():
+    # Give some time for Acrobat to open
+    time.sleep(1)
 
+    try:
+        # Find the Adobe Acrobat window by title
+        acrobat_window = gw.getWindowsWithTitle('Adobe Acrobat')[0]
+
+        # Close the window
+        acrobat_window.close()
+
+    except Exception as e:
+        print(f"Error: Unable to close Adobe Acrobat window. {e}")
+
+def print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name='Xprinter XP-365B'):
+    try:
+        command = [
+            acrobat_path,
+            "/t", pdf_path,
+            printer_name,
+        ]
+        subprocess.run(command, check=True)
+    except Exception as e:
+        print(f"Error: An unexpected error occurred while printing PDF. {e}")
+
+def print_pdfs_from_excel(excel_file_path, acrobat_path, printer_name='Xprinter XP-365B'):
     if not acrobat_path:
         print("Error: Adobe Acrobat path not found. Please check if it's installed.")
         return
 
     try:
-        # Read Excel file
         df = pd.read_excel(excel_file_path)
-
-        # Ensure the column containing local PDF paths is converted to strings
-        local_pdf_path_column_name = 'Local_PDF_Path_Column_Name'  # Replace with the actual column name
+        local_pdf_path_column_name = 'Local_PDF_Path_Column_Name'
         df[local_pdf_path_column_name] = df[local_pdf_path_column_name].astype(str)
-
-        # Ensure the column containing the number of copies is converted to integers
-        num_copies_column_name = 'Num_Copies'  # Replace with the actual column name
+        num_copies_column_name = 'Num_Copies'
         df[num_copies_column_name] = df[num_copies_column_name].astype(int)
 
-        # Iterate through the local PDF paths, print each one
         for index, row in df.iterrows():
             pdf_path = row[local_pdf_path_column_name]
             num_copies = row[num_copies_column_name]
 
             if isinstance(pdf_path, str) and os.path.exists(pdf_path) and pdf_path.lower().endswith('.pdf'):
                 set_number_of_copies(printer_name, num_copies)
-                print_pdf_to_printer(pdf_path, acrobat_path, printer_name)
+                print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name)
+                # Additional processing if needed
+
+                # Close Acrobat after printing each PDF
+                close_acrobat()
             else:
                 print(f"Error: Invalid or non-existent PDF path: {pdf_path}")
+
     except Exception as e:
         print(f"Error: Unable to process Excel file. {e}")
-
-def print_pdf_to_printer(pdf_path, acrobat_path, printer_name='Xprinter XP-365B'):
-    try:
-        # Set width and height according to Xprinter property
-        command = [acrobat_path, "/t", pdf_path, printer_name, '/h', '40', '/w', '58', '/o', 'album']
-        subprocess.run(command, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Error: Unable to print PDF file. {e}")
 
 # Replace 'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx' with the actual path to your Excel file
 excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx'
 
-# Optional: Specify the column name containing local PDF paths
-local_pdf_path_column_name = 'Local_PDF_Path_Column_Name'
-
-# Optional: Specify the column name containing the number of copies
-num_copies_column_name = 'Num_Copies'
-
 # Optional: Specify the printer name
 printer_name = 'Xprinter XP-365B'
 
+acrobat_path = get_acrobat_path()
+
 # Print PDFs using the modified code
-print_pdfs_from_excel(excel_file_path, printer_name)
+print_pdfs_from_excel(excel_file_path, acrobat_path, printer_name)
