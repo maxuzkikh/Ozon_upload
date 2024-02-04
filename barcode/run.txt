@@ -1,0 +1,12 @@
+python C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\print.py
+ 
+
+
+
+
+
+
+C:\work\baby prints\DTF a4\scripts\print.py
+
+printer_name = 'Xprinter XP-365B'
+excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx'
