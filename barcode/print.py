@@ -2,6 +2,7 @@ import pandas as pd
 import subprocess
 import os
 import winreg
+import win32print
 
 def get_acrobat_path():
     try:
@@ -19,6 +20,16 @@ def get_acrobat_path():
     except Exception as e:
         print(f"Error: Unable to find Adobe Acrobat path. {e}")
         return None
+
+def set_number_of_copies(printer_name, num_copies):
+    try:
+        h_printer = win32print.OpenPrinter(printer_name)
+        defaults = win32print.GetPrinter(h_printer, 2)
+        defaults['pDevMode'].Copies = num_copies
+        win32print.SetPrinter(h_printer, 2, defaults, 0)
+        win32print.ClosePrinter(h_printer)
+    except Exception as e:
+        print(f"Error: Unable to set number of copies. {e}")
 
 def print_pdfs_from_excel(excel_file_path, printer_name='Xprinter XP-365B'):
     acrobat_path = get_acrobat_path()
@@ -45,8 +56,8 @@ def print_pdfs_from_excel(excel_file_path, printer_name='Xprinter XP-365B'):
             num_copies = row[num_copies_column_name]
 
             if isinstance(pdf_path, str) and os.path.exists(pdf_path) and pdf_path.lower().endswith('.pdf'):
-                for _ in range(num_copies):
-                    print_pdf_to_printer(pdf_path, acrobat_path, printer_name)
+                set_number_of_copies(printer_name, num_copies)
+                print_pdf_to_printer(pdf_path, acrobat_path, printer_name)
             else:
                 print(f"Error: Invalid or non-existent PDF path: {pdf_path}")
     except Exception as e:
