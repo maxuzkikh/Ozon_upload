@@ -5,6 +5,8 @@ import winreg
 import win32print
 import time
 import pygetwindow as gw
+import psutil
+
 
 def get_acrobat_path():
     try:
@@ -34,18 +36,12 @@ def set_number_of_copies(printer_name, num_copies):
         print(f"Error: Unable to set the number of copies. {e}")
 
 def close_acrobat():
-    # Give some time for Acrobat to open
-    time.sleep(1)
+    PROCNAME = "Acrobat.exe"
 
-    try:
-        # Find the Adobe Acrobat window by title
-        acrobat_window = gw.getWindowsWithTitle('Adobe Acrobat')[0]
-
-        # Close the window
-        acrobat_window.close()
-
-    except Exception as e:
-        print(f"Error: Unable to close Adobe Acrobat window. {e}")
+    for proc in psutil.process_iter():
+        # check whether the process name matches
+        if proc.name() == PROCNAME:
+            proc.terminate()
 
 def print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name='Xprinter XP-365B'):
     try:
@@ -54,7 +50,7 @@ def print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name='Xprin
             "/t", pdf_path,
             printer_name,
         ]
-        subprocess.run(command, check=True)
+        subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception as e:
         print(f"Error: An unexpected error occurred while printing PDF. {e}")
 
@@ -80,6 +76,7 @@ def print_pdfs_from_excel(excel_file_path, acrobat_path, printer_name='Xprinter 
                 # Additional processing if needed
 
                 # Close Acrobat after printing each PDF
+                time.sleep(2)
                 close_acrobat()
             else:
                 print(f"Error: Invalid or non-existent PDF path: {pdf_path}")
