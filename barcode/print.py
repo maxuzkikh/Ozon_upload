@@ -1,21 +1,18 @@
+import os
+import shlex
+import win32print
+import psutil
 import pandas as pd
 import subprocess
-import os
 import winreg
-import win32print
 import time
-import pygetwindow as gw
-import psutil
-
 
 def get_acrobat_path():
     try:
         base_key = winreg.HKEY_LOCAL_MACHINE
         if os.environ.get('PROGRAMFILES(X86)'):
-            # 64-bit system
             acrobat_key = r"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\Acrobat.exe"
         else:
-            # 32-bit system
             acrobat_key = r"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\Acrobat.exe"
 
         with winreg.OpenKey(base_key, acrobat_key) as key:
@@ -39,12 +36,12 @@ def close_acrobat():
     PROCNAME = "Acrobat.exe"
 
     for proc in psutil.process_iter():
-        # check whether the process name matches
         if proc.name() == PROCNAME:
             proc.terminate()
 
-def print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name='Xprinter XP-365B'):
+def print_pdf_to_printer(pdf_path, acrobat_path, printer_name):
     try:
+        print("PDF Path:", pdf_path, " Printer Name:", printer_name)
         command = [
             acrobat_path,
             "/t", pdf_path,
@@ -54,32 +51,62 @@ def print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name='Xprin
     except Exception as e:
         print(f"Error: An unexpected error occurred while printing PDF. {e}")
 
-def print_pdfs_from_excel(excel_file_path, acrobat_path, printer_name='Xprinter XP-365B'):
+def find_pdf_path_by_articul(articul, barcode_excel_path):
+    try:
+        barcode_df = pd.read_excel(barcode_excel_path)
+        barcode_df['Артикул'] = barcode_df['Артикул'].astype(str)
+
+        # Find the row where 'Артикул' matches the provided value
+        row = barcode_df[barcode_df['Артикул'] == articul].iloc[0]
+
+        # Return the path from the 'Local_PDF_Path_Column_Name'
+        pdf_path = row['Local_PDF_Path_Column_Name'] if 'Local_PDF_Path_Column_Name' in row else None
+
+        if pdf_path and pdf_path.lower().endswith('.pdf'):
+            return pdf_path
+        else:
+            print(f"Error: Invalid or non-existent PDF path for Артикул {articul}")
+            return None
+
+    except Exception as e:
+        print(f"Error: Unable to find PDF path for Артикул {articul}. {e}")
+        return None
+
+def print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, acrobat_path,
+                                           printer_name='Xprinter XP-365B'):
     if not acrobat_path:
         print("Error: Adobe Acrobat path not found. Please check if it's installed.")
         return
 
     try:
         df = pd.read_excel(excel_file_path)
-        local_pdf_path_column_name = 'Local_PDF_Path_Column_Name'
-        df[local_pdf_path_column_name] = df[local_pdf_path_column_name].astype(str)
+        articul_column_name = 'Артикул'
+        df[articul_column_name] = df[articul_column_name].astype(str)
         num_copies_column_name = 'Num_Copies'
-        df[num_copies_column_name] = df[num_copies_column_name].astype(int)
+        df[num_copies_column_name] = pd.to_numeric(df[num_copies_column_name], errors='coerce').astype('Int64')
 
         for index, row in df.iterrows():
-            pdf_path = row[local_pdf_path_column_name]
+            articul = row[articul_column_name]
             num_copies = row[num_copies_column_name]
 
-            if isinstance(pdf_path, str) and os.path.exists(pdf_path) and pdf_path.lower().endswith('.pdf'):
-                set_number_of_copies(printer_name, num_copies)
-                print_pdf_to_printer_alternative(pdf_path, acrobat_path, printer_name)
-                # Additional processing if needed
+            if pd.notna(num_copies) and num_copies > 0:  # Skip if num_copies is 0 or NaN
+                pdf_path = find_pdf_path_by_articul(articul, barcode_excel_path)
 
-                # Close Acrobat after printing each PDF
-                time.sleep(2)
-                close_acrobat()
+                if pdf_path:
+                    set_number_of_copies(printer_name, num_copies)
+                    print_pdf_to_printer(pdf_path, acrobat_path, printer_name)
+
+                    # Wait for the print job to complete (adjust time if needed)
+                    time.sleep(2)
+
+                    # Additional processing if needed
+                    # ...
+
+                    close_acrobat()
+                else:
+                    print(f"Error: Invalid or non-existent PDF path for Артикул {articul}")
             else:
-                print(f"Error: Invalid or non-existent PDF path: {pdf_path}")
+                print(f"Skipping PDF printing for Артикул {articul} due to Num_Copies being 0 or NaN.")
 
     except Exception as e:
         print(f"Error: Unable to process Excel file. {e}")
@@ -87,10 +114,13 @@ def print_pdfs_from_excel(excel_file_path, acrobat_path, printer_name='Xprinter 
 # Replace 'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx' with the actual path to your Excel file
 excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx'
 
+# Specify the path to 'Data path barcode.xlsx'
+barcode_excel_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx'
+
 # Optional: Specify the printer name
 printer_name = 'Xprinter XP-365B'
 
 acrobat_path = get_acrobat_path()
 
 # Print PDFs using the modified code
-print_pdfs_from_excel(excel_file_path, acrobat_path, printer_name)
+print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, acrobat_path, printer_name)
