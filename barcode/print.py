@@ -35,9 +35,12 @@ def set_number_of_copies(printer_name, num_copies):
 def close_acrobat():
     PROCNAME = "Acrobat.exe"
 
-    for proc in psutil.process_iter():
-        if proc.name() == PROCNAME:
-            proc.terminate()
+    try:
+        for proc in psutil.process_iter(['pid', 'name']):
+            if proc.info['name'] == PROCNAME:
+                proc.terminate()
+    except Exception as e:
+        print(f"Error: Unable to terminate Acrobat process. {e}")
 
 def print_pdf_to_printer(pdf_path, acrobat_path, printer_name):
     try:
@@ -97,7 +100,7 @@ def print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, 
                     print_pdf_to_printer(pdf_path, acrobat_path, printer_name)
 
                     # Wait for the print job to complete (adjust time if needed)
-                    time.sleep(2)
+                    time.sleep(5)  # Adjust the duration as needed
 
                     # Additional processing if needed
                     # ...
