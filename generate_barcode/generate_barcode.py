@@ -1,55 +1,33 @@
-import subprocess
-import pyautogui
-import time
-import pygetwindow as gw
+import PyPDF2
 
-# Replace the path with the actual path to your Adobe Illustrator executable
-illustrator_path = r'C:\Program Files\Adobe\Adobe Illustrator 2022\Support Files\Contents\Windows\Illustrator.exe'
 
-# Replace the path with the actual path to your PDF files
-template_pdf_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\template_barcode.pdf'
-barcode_pdf_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\barcode.pdf'
+def edit_pdf(input_pdf_path, output_pdf_path, text):
+    # Open the input PDF file
+    with open(input_pdf_path, "rb") as input_file:
+        reader = PyPDF2.PdfReader(input_file)
+        writer = PyPDF2.PdfWriter()
 
-def open_illustrator_and_file(pdf_path):
-    # Find the Illustrator window
-    ai_window = gw.getWindowsWithTitle('Adobe Illustrator')
+        # Create a new page with the desired size
+        new_page = PyPDF2.pdf.PageObject.createBlankPage(None, 6 * 28.35, 6 * 28.35)
 
-    # If Illustrator is not running, open it
-    if not ai_window:
-        subprocess.Popen([illustrator_path])
-        time.sleep(7)  # Adjust the sleep duration based on your system's speed
+        # Add text to the canvas
+        new_page.merge_page(reader.pages[0])  # Merge with the first page of the input PDF
+        new_page.add_text(text, 100, 100)  # Adjust position as needed
 
-    # Now Illustrator should be running, find the window again
-    ai_window = gw.getWindowsWithTitle('Adobe Illustrator')
-    if ai_window:
-        ai_window = ai_window[0]
-        ai_window.activate()
+        # Add the modified page to the output PDF
+        writer.add_page(new_page)
 
-        # Simulate pressing Ctrl key
-        pyautogui.keyDown('ctrl')
+        # Write the output PDF file
+        with open(output_pdf_path, "wb") as output_file:
+            writer.write(output_file)
 
-        # Simulate pressing 'o' key
-        pyautogui.press('o')
 
-        # Release Ctrl key
-        pyautogui.keyUp('ctrl')
+# Path to the input PDF file
+input_pdf_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\barcode.pdf"
+# Path to the output PDF file
+output_pdf_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\output.pdf"
+# Text to add to the PDF
+text_to_add = "TEXT"
 
-        # Wait for the file dialog to appear (adjust the duration as needed)
-        time.sleep(2)
-
-        # Type the file path using pyautogui
-        pyautogui.write(pdf_path)
-
-        # Press Enter to open the file
-        pyautogui.press('enter')
-    else:
-        print("Adobe Illustrator window not found.")
-
-# Call the function to open "template_barcode.pdf"
-open_illustrator_and_file(template_pdf_path)
-
-# Wait for Illustrator to finish processing the first file (adjust the duration as needed)
-time.sleep(10)  # Increase the sleep duration
-
-# Call the function to open "barcode.pdf"
-open_illustrator_and_file(barcode_pdf_path)
+# Call the function to edit the PDF
+edit_pdf(input_pdf_path, output_pdf_path, text_to_add)
