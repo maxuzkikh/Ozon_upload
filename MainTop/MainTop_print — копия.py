@@ -4,76 +4,106 @@ import pyautogui
 import pyperclip
 import time
 
-def process_image(print_path):
+def process_image(print_path, rotate=False):
     # Simulate Ctrl+I
     pyautogui.hotkey('ctrl', 'i')
-    time.sleep(1)
+    time.sleep(5)
 
     # Copy the text to the clipboard
     pyperclip.copy(print_path)
-
+    time.sleep(0.5)
     # Simulate Ctrl+V to paste the text
     pyautogui.hotkey('ctrl', 'v')
-
+    time.sleep(0.5)
     # Press Enter to confirm
     pyautogui.press('enter')
     # Press Enter to confirm
     pyautogui.press('enter')
-    time.sleep(0.4)
-    pyautogui.click(18, 189)
-    pyautogui.moveTo(984, 545)
+    time.sleep(1)
+    # Pick Tool
+    pyautogui.click(30, 100)
+    pyautogui.moveTo(820, 450)
 
-    # Rotate
-    # Press and hold the Shift key
-    pyautogui.keyDown('shift')
-    # Drag the mouse cursor downwards by 30 pixels
-    pyautogui.dragRel(0, 30, duration=0.5)
-    # Release the Shift key
-    pyautogui.keyUp('shift')
-    pyautogui.mouseUp()
+    # Rotate if specified
+    if rotate:
+        #Rotate Tool
+        pyautogui.click(20, 189)
+        pyautogui.moveTo(984, 545)
+        # Press and hold the Shift key
+        pyautogui.keyDown('shift')
+        # Drag the mouse cursor downwards by 30 pixels
+        pyautogui.dragRel(0, 30, duration=1)
+        # Release the Shift key
+        pyautogui.keyUp('shift')
+        pyautogui.mouseUp()
+        pyautogui.keyDown('ctrl')
+        time.sleep(0.5)
 
-    # Simulate clicking CTRL key
-    pyautogui.keyDown('ctrl')
-
+    # Copy Window 0,100px
     # Press 'm' key
+    time.sleep(0.5)
+    pyautogui.keyDown('ctrl')
     pyautogui.press('m')
     pyautogui.keyUp('ctrl')
     # Zero values
+    time.sleep(0.5)
     pyautogui.doubleClick(1020, 190)
     pyautogui.typewrite('0')
+    time.sleep(0.5)
     pyautogui.doubleClick(930, 190)
     pyautogui.typewrite('100')
+    time.sleep(0.5)
+    # Copy Button
     pyautogui.click(1000, 360)
+    time.sleep(0.5)
+    # Pick Tool
     pyautogui.click(30, 100)
-    pyautogui.moveTo(920, 510)
-
+    pyautogui.moveTo(820, 450)
+    time.sleep(0.5)
+    #Select images
     # Press and hold the left mouse button
     pyautogui.mouseDown()
-
     # Drag the mouse cursor to the specified position
-    pyautogui.dragTo(1200, 800, duration=0.5)
+    pyautogui.dragTo(1200, 800, duration=1)
     # close Copy window
     pyautogui.click(1058, 366)
     time.sleep(1)
+
+
     # Align
     pyautogui.click(500, 70)
     pyautogui.doubleClick(235, 163)
     pyautogui.typewrite('5')
+    time.sleep(0.5)
     pyautogui.click(197, 163)
     pyautogui.hotkey('ctrl', 'g')
+    time.sleep(0.5)
     pyautogui.click(284, 141)
+    time.sleep(0.5)
+    pyautogui.click(500, 70)
+    time.sleep(0.5)
+    pyautogui.click(280, 111)
+    time.sleep(0.5)
+    pyautogui.click(984, 545)
 
+    
     # Move images UP
     pyautogui.keyDown('ctrl')
     pyautogui.press('m')
     pyautogui.keyUp('ctrl')
+    time.sleep(0.5)
     pyautogui.doubleClick(943, 185)
     pyautogui.typewrite('0')
+    time.sleep(0.5)
     pyautogui.doubleClick(1024, 189)
     pyautogui.typewrite('-1000')
     pyautogui.click(920, 360)
+    time.sleep(0.5)
+    #close window
+    pyautogui.click(1071, 364)
 
-    
+
+
 # Path to the file to open
 file_path = r"C:\work\baby prints\MainTop\tif\Template.tpf"
 
@@ -107,20 +137,35 @@ if os.path.exists(file_path):
                 column_indices["Num_Copies"] = cell.column
             elif value == "путь к печати":
                 column_indices["путь к печати"] = cell.column
+            elif value == "Rotate":
+                column_indices["Rotate"] = cell.column
 
-        # Get the value from the first row in the "путь к печати" column
-        if "путь к печати" in column_indices:
-            print_path = worksheet.cell(row=2, column=column_indices["путь к печати"]).value
-
-            # Remove all whitespace characters from print_path
-            # print_path = ''.join(print_path.split())
-
-            # Print the value of print_path
-            print("Print Path:", print_path)
-            process_image(print_path)
-
-
-
+        # Iterate over all rows in the Excel worksheet
+        for row in range(2, worksheet.max_row + 1):  # Start from the second row
+            # Get the value from the "Артикул" column
+            article = worksheet.cell(row=row, column=column_indices.get("Артикул"))
+            if article.value:
+                # Get the print path from the corresponding cell in the "путь к печати" column
+                print_path = worksheet.cell(row=row, column=column_indices.get("путь к печати")).value
+                # Check if Rotate column exists
+                if "Rotate" in column_indices:
+                    # Get the value from the "Rotate" column
+                    rotate_value = worksheet.cell(row=row, column=column_indices.get("Rotate")).value
+                    # Convert the value to boolean
+                    rotate = bool(rotate_value)
+                else:
+                    rotate = False  # If Rotate column not found, set rotate to False by default
+                if print_path:
+                    # Print the article, print path, and rotation values
+                    #print("Article:", article.value)
+                    #print("Print Path:", print_path)
+                    #print("Rotate:", rotate)
+                    # Call process_image function for the print path with rotation information
+                    process_image(print_path, rotate=rotate)
+                else:
+                    print("Print path not found for article:", article.value)
+            else:
+                print("Article value not found in row:", row)
 
         # Close the workbook
         workbook.close()
@@ -128,6 +173,3 @@ if os.path.exists(file_path):
         print("Excel file not found:", excel_file)
 else:
     print("File not found:", file_path)
-
-
-
