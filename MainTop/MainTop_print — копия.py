@@ -1,0 +1,133 @@
+import os
+import openpyxl
+import pyautogui
+import pyperclip
+import time
+
+def process_image(print_path):
+    # Simulate Ctrl+I
+    pyautogui.hotkey('ctrl', 'i')
+    time.sleep(1)
+
+    # Copy the text to the clipboard
+    pyperclip.copy(print_path)
+
+    # Simulate Ctrl+V to paste the text
+    pyautogui.hotkey('ctrl', 'v')
+
+    # Press Enter to confirm
+    pyautogui.press('enter')
+    # Press Enter to confirm
+    pyautogui.press('enter')
+    time.sleep(0.4)
+    pyautogui.click(18, 189)
+    pyautogui.moveTo(984, 545)
+
+    # Rotate
+    # Press and hold the Shift key
+    pyautogui.keyDown('shift')
+    # Drag the mouse cursor downwards by 30 pixels
+    pyautogui.dragRel(0, 30, duration=0.5)
+    # Release the Shift key
+    pyautogui.keyUp('shift')
+    pyautogui.mouseUp()
+
+    # Simulate clicking CTRL key
+    pyautogui.keyDown('ctrl')
+
+    # Press 'm' key
+    pyautogui.press('m')
+    pyautogui.keyUp('ctrl')
+    # Zero values
+    pyautogui.doubleClick(1020, 190)
+    pyautogui.typewrite('0')
+    pyautogui.doubleClick(930, 190)
+    pyautogui.typewrite('100')
+    pyautogui.click(1000, 360)
+    pyautogui.click(30, 100)
+    pyautogui.moveTo(920, 510)
+
+    # Press and hold the left mouse button
+    pyautogui.mouseDown()
+
+    # Drag the mouse cursor to the specified position
+    pyautogui.dragTo(1200, 800, duration=0.5)
+    # close Copy window
+    pyautogui.click(1058, 366)
+    time.sleep(1)
+    # Align
+    pyautogui.click(500, 70)
+    pyautogui.doubleClick(235, 163)
+    pyautogui.typewrite('5')
+    pyautogui.click(197, 163)
+    pyautogui.hotkey('ctrl', 'g')
+    pyautogui.click(284, 141)
+
+    # Move images UP
+    pyautogui.keyDown('ctrl')
+    pyautogui.press('m')
+    pyautogui.keyUp('ctrl')
+    pyautogui.doubleClick(943, 185)
+    pyautogui.typewrite('0')
+    pyautogui.doubleClick(1024, 189)
+    pyautogui.typewrite('-1000')
+    pyautogui.click(920, 360)
+
+    
+# Path to the file to open
+file_path = r"C:\work\baby prints\MainTop\tif\Template.tpf"
+
+# Check if file exists
+if os.path.exists(file_path):
+    # Open the file
+    print("Opening file:", file_path)
+    os.startfile(file_path)
+    time.sleep(4)  # Introduce a small delay
+
+    # Path to the Excel file
+    excel_file = r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\WB_demand.xlsx"
+
+    # Check if Excel file exists
+    if os.path.exists(excel_file):
+        # Load the workbook
+        workbook = openpyxl.load_workbook(excel_file)
+
+        # Select the active worksheet
+        worksheet = workbook.active
+
+        # Dictionary to store column indices
+        column_indices = {}
+
+        # Iterate over the first row to find the columns
+        for cell in worksheet[1]:
+            value = cell.value
+            if value == "Артикул":
+                column_indices["Артикул"] = cell.column
+            elif value == "Num_Copies":
+                column_indices["Num_Copies"] = cell.column
+            elif value == "путь к печати":
+                column_indices["путь к печати"] = cell.column
+
+        # Get the value from the first row in the "путь к печати" column
+        if "путь к печати" in column_indices:
+            print_path = worksheet.cell(row=2, column=column_indices["путь к печати"]).value
+
+            # Remove all whitespace characters from print_path
+            # print_path = ''.join(print_path.split())
+
+            # Print the value of print_path
+            print("Print Path:", print_path)
+            process_image(print_path)
+
+
+
+
+        # Close the workbook
+        workbook.close()
+    else:
+        print("Excel file not found:", excel_file)
+else:
+    print("File not found:", file_path)
+
+
+

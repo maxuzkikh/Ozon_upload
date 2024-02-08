@@ -5,7 +5,7 @@ python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\combine_pdf.py
 python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\generate_barcode.py
 python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\merge_svg.py
 
-
+python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\photoshop.py
 python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\pdfTopng.py
 
 C:\work\baby prints\DTF a4\scripts\print.py

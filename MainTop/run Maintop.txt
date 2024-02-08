@@ -1,0 +1,1 @@
+python C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\MainTop_print.py
