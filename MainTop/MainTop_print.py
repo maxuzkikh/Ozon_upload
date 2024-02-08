@@ -9,20 +9,20 @@ def process_image(print_path, rotate=False):
     # Simulate Ctrl+I
     pyautogui.hotkey('ctrl', 'i')
     if start == 0:
-        time.sleep(4)
-        
-    time.sleep(1)
+        time.sleep(3)
+
+    time.sleep(0.1)
     # Copy the text to the clipboard
     pyperclip.copy(print_path)
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Simulate Ctrl+V to paste the text
     pyautogui.hotkey('ctrl', 'v')
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Press Enter to confirm
     pyautogui.press('enter')
     # Press Enter to confirm
     pyautogui.press('enter')
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Pick Tool
     pyautogui.click(30, 100)
     pyautogui.moveTo(820, 450)
@@ -36,98 +36,141 @@ def process_image(print_path, rotate=False):
         # Press and hold the Shift key
         pyautogui.keyDown('shift')
         # Drag the mouse cursor downwards by 30 pixels
-        pyautogui.dragRel(0, 30, duration=1)
+        pyautogui.dragRel(0, 30, duration=0.3)
         # Release the Shift key
         pyautogui.keyUp('shift')
         pyautogui.mouseUp()
         pyautogui.keyDown('ctrl')
-        time.sleep(0.2)
+        time.sleep(0.1)
 
     # Copy Window 0,100px
     # Press 'm' key
-    time.sleep(0.2)
+    time.sleep(0.1)
     pyautogui.keyDown('ctrl')
     pyautogui.press('m')
     pyautogui.keyUp('ctrl')
     # Zero values
-    time.sleep(0.2)
+    time.sleep(0.1)
     pyautogui.doubleClick(1020, 190)
     pyautogui.typewrite('0')
-    time.sleep(0.2)
+    time.sleep(0.1)
     pyautogui.doubleClick(930, 190)
     pyautogui.typewrite('100')
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Copy Button
     pyautogui.click(1000, 360)
-    time.sleep(0.2)
+    time.sleep(0.1)
 
     # Pick Tool
     pyautogui.click(30, 100)
     pyautogui.moveTo(945, 540)
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Select images
-    # Press and hold the left mouse button
     pyautogui.mouseDown()
-    # Drag the mouse cursor to the specified position
-    pyautogui.dragTo(1015, 571, duration=1)
+    pyautogui.dragTo(1015, 571, duration=0.3)
     # close Copy window
     pyautogui.click(1058, 366)
-    time.sleep(0.2)
+    time.sleep(0.1)
 
     # Align in width
-    #Open window
+    # Open window
     pyautogui.click(500, 70)
     pyautogui.doubleClick(235, 163)
     pyautogui.typewrite('5')
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Align 5mm width
     pyautogui.click(197, 163)
     pyautogui.hotkey('ctrl', 'g')
-    time.sleep(0.2)
+    time.sleep(0.1)
     # Align to center of document
     pyautogui.click(284, 141)
-    time.sleep(0.2)
-    #Close window
+    time.sleep(0.1)
+    # Close window
     pyautogui.click(280, 111)
-    time.sleep(0.2)
-    #Click Center of Aplication
+    time.sleep(0.1)
+    # Click Center of Aplication
     pyautogui.click(982, 555)
 
-    # Move images UP
+    # Make Copies of on images from demand Num_Copies
+    # Select images
+    # Click Center of Aplication
+    pyautogui.click(982, 555)
+    # Open window Copys
+    time.sleep(0.1)
     pyautogui.keyDown('ctrl')
     pyautogui.press('m')
     pyautogui.keyUp('ctrl')
-    time.sleep(0.2)
+    time.sleep(0.1)
     pyautogui.doubleClick(943, 185)
     pyautogui.typewrite('0')
-    time.sleep(0.2)
+    time.sleep(0.1)
     pyautogui.doubleClick(1024, 189)
-    pyautogui.typewrite(str(offset))
-    pyautogui.click(920, 360)
-    time.sleep(0.2)
+    pyautogui.typewrite('100')
+    
+    # Get the number of copies from the corresponding cell in the "Num_Copies" column
+    num_copies = worksheet.cell(row=row, column=column_indices.get("Num_Copies")).value
+
+    if num_copies is not None and isinstance(num_copies, int) and num_copies > 0:
+        for _ in range(num_copies):
+            pyautogui.click(1000, 364)
+            # Optionally, add a small delay between clicks for stability
+            time.sleep(0.05)
+
+    time.sleep(0.05)
     # close window
     pyautogui.click(1071, 364)
 
+    
+    if start == 0:
+        # Move images first image UP
+        time.sleep(0.1)
+        pyautogui.keyDown('ctrl')
+        pyautogui.press('m')
+        pyautogui.keyUp('ctrl')
+        time.sleep(0.1)
+        pyautogui.doubleClick(943, 185)
+        pyautogui.typewrite('0')
+        time.sleep(0.1)
+        pyautogui.doubleClick(1024, 189)
+        pyautogui.typewrite(str(offset))
+        pyautogui.click(920, 360)
+        time.sleep(0.1)
+        # close window
+        pyautogui.click(1071, 364)
 
+    # Align all in height
+    # select all images
+    pyautogui.moveTo(943, 110)
+    pyautogui.mouseDown()
+    pyautogui.dragTo(1020, 995, duration=0.3)
+    # Open window
+    pyautogui.click(500, 70)
+    pyautogui.doubleClick(223, 209)
+    pyautogui.typewrite('5')
+    time.sleep(0.1)
+    # Align 5mm height
+    pyautogui.click(196, 209)
+    time.sleep(0.1)
+    # Close window
+    pyautogui.click(280, 111)
+    time.sleep(0.1)
+    # Click Center of Aplication
+    pyautogui.click(982, 555)
+
+
+    #Move canvas
     if start>0:
-        # Align all in height
-        #select all images
-        pyautogui.moveTo(943, 110)
-        pyautogui.mouseDown()
-        pyautogui.dragTo(1020, 995, duration=1)
-        #Open window
-        pyautogui.click(500, 70)
-        pyautogui.doubleClick(223, 209)
-        pyautogui.typewrite('5')
-        time.sleep(0.2)
-        # Align 5mm height
-        pyautogui.click(196, 521)
-        time.sleep(0.2)
-        #Close window
-        pyautogui.click(280, 111)
-        time.sleep(0.2)
-        #Click Center of Aplication
-        pyautogui.click(982, 555)
+        pyautogui.click(26,228)
+        # Click Center of Aplication
+        pyautogui.moveTo(982, 555)
+        # Simulate Ctrl + Left Mouse Click
+        pyautogui.keyDown('ctrl')
+        pyautogui.mouseDown(button='left')
+
+
+        # Drag the mouse cursor upwards by 200 pixels
+        pyautogui.dragRel(0, -150, duration=1)  # Specify the distance and duration as per your requirement
+        pyautogui.keyUp('ctrl')
 
 
 # Path to the file to open
@@ -138,7 +181,7 @@ if os.path.exists(file_path):
     # Open the file
     print("Opening file:", file_path)
     os.startfile(file_path)
-    time.sleep(4)  # Introduce a small delay
+    time.sleep(2)  # Introduce a small delay
 
     # Path to the Excel file
     excel_file = r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\WB_demand.xlsx"
@@ -166,9 +209,8 @@ if os.path.exists(file_path):
             elif value == "Rotate":
                 column_indices["Rotate"] = cell.column
 
-
         # Initialize offset to -100
-        offset = -12000
+        offset = -13500
         start = 0
 
         # Iterate over all rows in the Excel worksheet
