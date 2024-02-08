@@ -169,7 +169,7 @@ def process_image(print_path, rotate=False):
 
 
         # Drag the mouse cursor upwards by 200 pixels
-        pyautogui.dragRel(0, -150, duration=1)  # Specify the distance and duration as per your requirement
+        pyautogui.dragRel(0, -30, duration=0.5)  # Specify the distance and duration as per your requirement
         pyautogui.keyUp('ctrl')
 
 
@@ -220,15 +220,16 @@ if os.path.exists(file_path):
             if article.value:
                 # Get the print path from the corresponding cell in the "путь к печати" column
                 print_path = worksheet.cell(row=row, column=column_indices.get("путь к печати")).value
-                # Check if Rotate column exists
-                if "Rotate" in column_indices:
-                    # Get the value from the "Rotate" column
-                    rotate_value = worksheet.cell(row=row, column=column_indices.get("Rotate")).value
-                    # Convert the value to boolean
-                    rotate = bool(rotate_value)
-                else:
-                    rotate = False  # If Rotate column not found, set rotate to False by default
-                if print_path:
+                # Check if the print path is not empty or 0
+                if print_path and print_path != 0:
+                    # Check if Rotate column exists
+                    if "Rotate" in column_indices:
+                        # Get the value from the "Rotate" column
+                        rotate_value = worksheet.cell(row=row, column=column_indices.get("Rotate")).value
+                        # Convert the value to boolean
+                        rotate = bool(rotate_value)
+                    else:
+                        rotate = False  # If Rotate column not found, set rotate to False by default
                     # Print the article, print path, and rotation values
                     # print("Article:", article.value)
                     # print("Print Path:", print_path)
@@ -238,7 +239,7 @@ if os.path.exists(file_path):
                     offset += 200  # Decrement offset by 100 for the next iteration
                     start += 1
                 else:
-                    print("Print path not found for article:", article.value)
+                    print("Skipping row:", row, "as 'путь к печати' is empty or 0")
             else:
                 print("Article value not found in row:", row)
 
