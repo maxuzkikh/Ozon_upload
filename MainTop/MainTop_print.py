@@ -3,6 +3,16 @@ import openpyxl
 import pyautogui
 import pyperclip
 import time
+import signal
+import sys
+
+# Signal handler function
+def signal_handler(sig, frame):
+    print("Received signal. Stopping script...")
+    sys.exit(0)
+
+# Register the signal handler for SIGINT (Ctrl+C)
+signal.signal(signal.SIGINT, signal_handler)
 
 
 def process_image(print_path, rotate=False):
