@@ -6,10 +6,12 @@ import time
 import signal
 import sys
 
+
 # Signal handler function
 def signal_handler(sig, frame):
     print("Received signal. Stopping script...")
     sys.exit(0)
+
 
 # Register the signal handler for SIGINT (Ctrl+C)
 signal.signal(signal.SIGINT, signal_handler)
@@ -86,9 +88,9 @@ def process_image(print_path, rotate=False):
     # Open window
     pyautogui.click(500, 70)
     pyautogui.doubleClick(235, 163)
-    pyautogui.typewrite('5')
+    pyautogui.typewrite('4')
     time.sleep(0.1)
-    # Align 5mm width
+    # Align 4mm width
     pyautogui.click(197, 163)
     pyautogui.hotkey('ctrl', 'g')
     time.sleep(0.1)
@@ -116,11 +118,17 @@ def process_image(print_path, rotate=False):
     time.sleep(0.1)
     pyautogui.doubleClick(1024, 189)
     pyautogui.typewrite('100')
-    
+
     # Get the number of copies from the corresponding cell in the "Num_Copies" column
     num_copies = worksheet.cell(row=row, column=column_indices.get("Num_Copies")).value
 
+    # Get the value of "Раскладка в ширину" for the current row
+    layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
+
     if num_copies is not None and isinstance(num_copies, int) and num_copies > 0:
+        # Calculate the number of copies based on "Раскладка в ширину" and round to the nearest integer
+        num_copies = (round(num_copies / layout_width)-1)
+
         for _ in range(num_copies):
             pyautogui.click(1000, 364)
             # Optionally, add a small delay between clicks for stability
@@ -130,21 +138,20 @@ def process_image(print_path, rotate=False):
     # close window
     pyautogui.click(1071, 364)
 
-    
     if start == 0:
         # Move images first image UP
-        time.sleep(0.1)
+        time.sleep(1)
         pyautogui.keyDown('ctrl')
         pyautogui.press('m')
         pyautogui.keyUp('ctrl')
-        time.sleep(0.1)
+        time.sleep(1)
         pyautogui.doubleClick(943, 185)
         pyautogui.typewrite('0')
-        time.sleep(0.1)
+        time.sleep(1)
         pyautogui.doubleClick(1024, 189)
         pyautogui.typewrite(str(offset))
         pyautogui.click(920, 360)
-        time.sleep(0.1)
+        time.sleep(1)
         # close window
         pyautogui.click(1071, 364)
 
@@ -163,20 +170,18 @@ def process_image(print_path, rotate=False):
     time.sleep(0.1)
     # Close window
     pyautogui.click(280, 111)
-    time.sleep(0.1)
+    time.sleep(5)
     # Click Center of Aplication
     pyautogui.click(982, 555)
 
-
-    #Move canvas
-    if start>0:
-        pyautogui.click(26,228)
+    # Move canvas
+    if start > 0:
+        pyautogui.click(26, 228)
         # Click Center of Aplication
         pyautogui.moveTo(982, 555)
         # Simulate Ctrl + Left Mouse Click
         pyautogui.keyDown('ctrl')
         pyautogui.mouseDown(button='left')
-
 
         # Drag the mouse cursor upwards by 200 pixels
         pyautogui.dragRel(0, -30, duration=0.5)  # Specify the distance and duration as per your requirement
@@ -218,9 +223,11 @@ if os.path.exists(file_path):
                 column_indices["путь к печати"] = cell.column
             elif value == "Rotate":
                 column_indices["Rotate"] = cell.column
+            elif value == "Раскладка в ширину":  # New column
+                column_indices["Раскладка в ширину"] = cell.column
 
         # Initialize offset to -100
-        offset = -13500
+        offset = -12500
         start = 0
 
         # Iterate over all rows in the Excel worksheet
