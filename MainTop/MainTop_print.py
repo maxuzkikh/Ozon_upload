@@ -126,8 +126,14 @@ def process_image(print_path, rotate=False):
     layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
 
     if num_copies is not None and isinstance(num_copies, int) and num_copies > 0:
+
+        # Ensure num_copies is even
+        if num_copies % 2 != 0:
+            num_copies += 1
         # Calculate the number of copies based on "Раскладка в ширину" and round to the nearest integer
-        num_copies = (round(num_copies / layout_width)-1)
+        num_copies = round(num_copies / layout_width)-1
+
+
 
         for _ in range(num_copies):
             pyautogui.click(1000, 364)
@@ -170,7 +176,7 @@ def process_image(print_path, rotate=False):
     time.sleep(0.1)
     # Close window
     pyautogui.click(280, 111)
-    time.sleep(5)
+    time.sleep(0.1)
     # Click Center of Aplication
     pyautogui.click(982, 555)
 
