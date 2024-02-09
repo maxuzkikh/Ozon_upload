@@ -1,1 +1,2 @@
 python C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\MainTop_print.py
+python C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\get values.py

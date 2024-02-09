@@ -5,6 +5,7 @@ import pyperclip
 import time
 import signal
 import sys
+import pandas as pd
 
 
 # Signal handler function
@@ -17,7 +18,7 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-def process_image(print_path, rotate=False):
+def process_image(print_path, rotate=False, layout_width=None):
     # Simulate Ctrl+I
     pyautogui.hotkey('ctrl', 'i')
     if start == 0:
@@ -48,7 +49,7 @@ def process_image(print_path, rotate=False):
         # Press and hold the Shift key
         pyautogui.keyDown('shift')
         # Drag the mouse cursor downwards by 30 pixels
-        pyautogui.dragRel(0, 30, duration=0.3)
+        pyautogui.dragRel(0, 30, duration=0.2)
         # Release the Shift key
         pyautogui.keyUp('shift')
         pyautogui.mouseUp()
@@ -62,7 +63,7 @@ def process_image(print_path, rotate=False):
 
 
     # Раскладка Copy in width!!! Window 0,100px
-    layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
+    #layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
     if layout_width>1:
         # Press 'm' key
         time.sleep(0.1)
@@ -86,7 +87,7 @@ def process_image(print_path, rotate=False):
         time.sleep(0.1)
         # Select images
         pyautogui.mouseDown()
-        pyautogui.dragTo(1015, 571, duration=0.3)
+        pyautogui.dragTo(1015, 571, duration=0.2)
         # close Copy window
         pyautogui.click(1058, 366)
         time.sleep(0.1)
@@ -109,7 +110,7 @@ def process_image(print_path, rotate=False):
     #time.sleep(3)
     # Select images
     #pyautogui.mouseDown()
-    #pyautogui.dragTo(1015, 571, duration=0.3)
+    #pyautogui.dragTo(1015, 571, duration=0.2)
     #time.sleep(1)
 
     # Open window Align
@@ -143,22 +144,21 @@ def process_image(print_path, rotate=False):
     pyautogui.typewrite('100')
 
     # Get the number of copies from the corresponding cell in the "Num_Copies" column
-    num_copies = worksheet.cell(row=row, column=column_indices.get("Num_Copies")).value
+    num_copies_raw = wb_demand_df.loc[wb_demand_df["Артикул"] == article, "Num_Copies"].values[0]
+    num_copies = int(num_copies_raw) if pd.notnull(num_copies_raw) else 0
 
-    # Get the value of "Раскладка в ширину" for the current row
-    layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
+    print(num_copies)
 
-    if num_copies is not None and isinstance(num_copies, int) and num_copies > 0:
-
+    if num_copies > 0:
         # Ensure num_copies is even
         if num_copies % 2 != 0:
             num_copies += 1
+
         # Calculate the number of copies based on "Раскладка в ширину" and round to the nearest integer
-        num_copies = round(num_copies / layout_width)-1
-
-
+        num_copies = round(num_copies / layout_width) - 1
 
         for _ in range(num_copies):
+            print("COPY")
             pyautogui.click(1000, 364)
             # Optionally, add a small delay between clicks for stability
             time.sleep(0.05)
@@ -188,7 +188,7 @@ def process_image(print_path, rotate=False):
     # select all images
     pyautogui.moveTo(943, 110)
     pyautogui.mouseDown()
-    pyautogui.dragTo(1020, 995, duration=0.3)
+    pyautogui.dragTo(1020, 995, duration=0.2)
     # Open window
     pyautogui.click(500, 70)
     pyautogui.doubleClick(223, 209)
@@ -213,7 +213,7 @@ def process_image(print_path, rotate=False):
         pyautogui.mouseDown(button='left')
 
         # Drag the mouse cursor upwards by 200 pixels
-        pyautogui.dragRel(0, -30, duration=0.5)  # Specify the distance and duration as per your requirement
+        pyautogui.dragRel(0, -15, duration=0.2)  # Specify the distance and duration as per your requirement
         pyautogui.keyUp('ctrl')
 
 
@@ -227,72 +227,84 @@ if os.path.exists(file_path):
     os.startfile(file_path)
     time.sleep(2)  # Introduce a small delay
 
-    # Path to the Excel file
-    excel_file = r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\WB_demand.xlsx"
-    excel_file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
 
-    # Check if Excel file exists
-    if os.path.exists(excel_file):
-        # Load the workbook
-        workbook = openpyxl.load_workbook(excel_file)
+    # Initialize offset to -100
+    offset = -12500
+    start = 0
 
-        # Select the active worksheet
-        worksheet = workbook.active
 
-        # Dictionary to store column indices
-        column_indices = {}
 
-        # Iterate over the first row to find the columns
-        for cell in worksheet[1]:
-            value = cell.value
-            if value == "Артикул":
-                column_indices["Артикул"] = cell.column
-            elif value == "Num_Copies":
-                column_indices["Num_Copies"] = cell.column
-            elif value == "путь к печати":
-                column_indices["путь к печати"] = cell.column
-            elif value == "Rotate":
-                column_indices["Rotate"] = cell.column
-            elif value == "Раскладка в ширину":  # New column
-                column_indices["Раскладка в ширину"] = cell.column
 
-        # Initialize offset to -100
-        offset = -12500
-        start = 0
+    # Read the WB_demand.xlsx file
+    wb_demand_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\WB_demand.xlsx")
 
-        # Iterate over all rows in the Excel worksheet
-        for row in range(2, worksheet.max_row + 1):  # Start from the second row
-            # Get the value from the "Артикул" column
-            article = worksheet.cell(row=row, column=column_indices.get("Артикул"))
-            if article.value:
-                # Get the print path from the corresponding cell in the "путь к печати" column
-                print_path = worksheet.cell(row=row, column=column_indices.get("путь к печати")).value
-                # Check if the print path is not empty or 0
-                if print_path and print_path != 0:
-                    # Check if Rotate column exists
-                    if "Rotate" in column_indices:
-                        # Get the value from the "Rotate" column
-                        rotate_value = worksheet.cell(row=row, column=column_indices.get("Rotate")).value
-                        # Convert the value to boolean
-                        rotate = bool(rotate_value)
-                    else:
-                        rotate = False  # If Rotate column not found, set rotate to False by default
-                    # Print the article, print path, and rotation values
-                    # print("Article:", article.value)
-                    # print("Print Path:", print_path)
-                    # print("Rotate:", rotate)
-                    # Call process_image function for the print path with rotation information
-                    process_image(print_path, rotate=rotate)
-                    offset += 200  # Decrement offset by 100 for the next iteration
-                    start += 1
-                else:
-                    print("Skipping row:", row, "as 'путь к печати' is empty or 0")
-            else:
-                print("Article value not found in row:", row)
+    # Read the Data path barcode.xlsx file
+    barcode_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx")
 
-        # Close the workbook
-        workbook.close()
-    else:
-        print("Excel file not found:", excel_file)
-else:
-    print("File not found:", file_path)
+    # Extract the unique values of "Артикул" from WB_demand.xlsx
+    articles = wb_demand_df["Артикул"].unique()
+
+    # Initialize empty lists to store the values
+    print_paths = []
+    rotates = []
+    layout_widths = []
+
+    # Iterate through each unique article
+    for article in articles:
+        # Find the matching row in barcode_df based on the article value
+        matching_row = barcode_df[barcode_df["Артикул"] == article]
+
+        # If a matching row is found, extract the values of print_path, rotate, and layout_width
+        if not matching_row.empty:
+            print_paths.append(matching_row["путь к печати"].values[0])
+            rotates.append(matching_row["Rotate"].values[0])
+            layout_widths.append(matching_row["Раскладка в ширину"].values[0])
+        else:
+            # If no matching row is found, append None to indicate missing data
+            print_paths.append(None)
+            rotates.append(None)
+            layout_widths.append(None)
+
+    # Create a new DataFrame to store the results
+    result_df = pd.DataFrame({
+        "Артикул": articles,
+        "путь к печати": print_paths,
+        "Rotate": rotates,
+        "Раскладка в ширину": layout_widths
+    })
+
+    # Print or further process the result DataFrame as needed
+    print(result_df)
+
+    # Check if print_paths is empty or all elements are zero
+    if not any(print_paths) or all(path == 0 for path in print_paths):
+        print("No valid print paths found. Exiting...")
+        sys.exit(0)
+
+    # Iterate through print_paths
+    for index, article in enumerate(articles):
+        print_path = print_paths[index]
+        rotate = rotates[index]
+        layout_width = layout_widths[index]
+
+        # Check if article exists in wb_demand_df
+        if article in wb_demand_df["Артикул"].values:
+            # Extract Num_Copies if the article exists
+            num_copies = wb_demand_df.loc[wb_demand_df["Артикул"] == article, "Num_Copies"].values[0]
+
+            # Check if Num_Copies is 0, then skip
+            if num_copies == 0:
+                print(f"Skipping article {article} as Num_Copies is 0.")
+                continue
+        else:
+            print(f"Article {article} not found in wb_demand_df. Skipping.")
+            continue
+
+        # Check if print_path is empty or 0
+        if not print_path or print_path == 0:
+            print(f"Encountered empty or 0 print_path for article {article}. Stopping script.")
+            sys.exit(0)
+
+        process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
+        offset += 200  # Increment offset for the next iteration
+        start += 1
