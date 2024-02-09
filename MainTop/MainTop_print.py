@@ -229,6 +229,7 @@ if os.path.exists(file_path):
 
     # Path to the Excel file
     excel_file = r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\WB_demand.xlsx"
+    excel_file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
 
     # Check if Excel file exists
     if os.path.exists(excel_file):
