@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # Read the first Excel file
-file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г1.xlsx"
+file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г2.xlsx"
 df1 = pd.read_excel(file1_path)
 
 # Read the second Excel file

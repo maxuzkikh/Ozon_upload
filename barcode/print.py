@@ -115,7 +115,7 @@ def print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, 
         print(f"Error: Unable to process Excel file. {e}")
 
 # Replace 'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx' with the actual path to your Excel file
-excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\WB_demand_delete.xlsx'
+excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\temp.xlsx'
 
 # Specify the path to 'Data path barcode.xlsx'
 barcode_excel_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx'
