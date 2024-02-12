@@ -6,6 +6,7 @@ df_original = pd.read_excel(file_path)
 
 # Create a new DataFrame with the desired column names
 new_columns = [
+    "Предмет",
     "Номер карточки",
     "Предмет",
     "Артикул производителя",
