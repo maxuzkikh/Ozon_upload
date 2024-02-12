@@ -8,9 +8,14 @@ python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\merge_svg.py
 python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\photoshop.py
 python C:\Users\Max\Documents\GitHub\Ozon_upload\generate_barcode\pdfTopng.py
 
+python "C:\Users\Max\Documents\GitHub\Ozon_upload\создание карточки XLS\generate_import.py"
+
+
 C:\work\baby prints\DTF a4\scripts\print.py
 
 printer_name = 'Xprinter XP-365B'
 excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx'
 
 python C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\find_barcode_for_WB.py
+
+https://raw.githubusercontent.com/maxuzkikh/Ozon_upload/main/images/А4/Термонаклейка Девушка волосы облако Тест2_1.jpg;https://raw.githubusercontent.com/maxuzkikh/Ozon_upload/main/images/А4/Термонаклейка Девушка волосы облако Тест2_2.jpg;
