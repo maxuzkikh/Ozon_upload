@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Read data from the original Excel file
-file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
+file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\создание карточки XLS\Data_to_create.xlsx"
 df_original = pd.read_excel(file_path)
 
 # Create a new DataFrame with the desired column names
