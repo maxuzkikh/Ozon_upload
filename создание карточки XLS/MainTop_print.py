@@ -230,7 +230,7 @@ if os.path.exists(file_path):
 
 
     # Initialize offset to -100
-    offset = -12500
+    offset = -12000
     start = 0
 
 
@@ -288,13 +288,17 @@ if os.path.exists(file_path):
         rotate = rotates[index]
         layout_width = layout_widths[index]
 
+        # Get the number of copies from the corresponding cell in the "Num_Copies" column
+        num_copies_raw = wb_demand_df.loc[wb_demand_df["Артикул"] == article, "Num_Copies"].values[0]
+        num_copies = int(num_copies_raw) if pd.notnull(num_copies_raw) else 0
+
         # Check if article exists in wb_demand_df
         if article in wb_demand_df["Артикул"].values:
             # Extract Num_Copies if the article exists
             num_copies = wb_demand_df.loc[wb_demand_df["Артикул"] == article, "Num_Copies"].values[0]
 
             # Check if Num_Copies is 0, then skip
-            if num_copies == 0:
+            if pd.isnull(num_copies) or num_copies == 0 or num_copies < 0:
                 print(f"Skipping article {article} as Num_Copies is 0.")
                 continue
         else:
@@ -304,8 +308,11 @@ if os.path.exists(file_path):
         # Check if print_path is empty or 0
         if not print_path or print_path == 0:
             print(f"Encountered empty or 0 print_path for article {article}. Stopping script.")
+            time.sleep(1)
             sys.exit(0)
+            time.sleep(1)
 
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
-        offset += 200  # Increment offset for the next iteration
+        offset += 100  # Increment offset for the next iteration
         start += 1
+
