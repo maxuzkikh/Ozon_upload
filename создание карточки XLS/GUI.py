@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog
 import subprocess
 
 def run_script1():
@@ -8,10 +9,13 @@ def run_script2():
     subprocess.Popen(["python", "generate_import_WB.py"])
 
 def run_script3():
-    subprocess.Popen(["python", "get_demand.py"])
+        subprocess.Popen(["python", "get_demand.py"])
 
 def run_script4():
     subprocess.Popen(["python", "MainTop_print.py"])
+
+def run_script5():
+    subprocess.Popen(["python", "print_bar_code.py"])
 
 root = tk.Tk()
 root.title("Python Script Runner")
@@ -30,5 +34,8 @@ button3.pack()
 
 button4 = tk.Button(root, text="MainTop_print", command=run_script4)
 button4.pack()
+
+button5 = tk.Button(root, text="print_bar_code", command=run_script5)
+button5.pack()
 
 root.mainloop()

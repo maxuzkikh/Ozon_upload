@@ -6,6 +6,8 @@ import pandas as pd
 import subprocess
 import winreg
 import time
+import tkinter as tk
+from tkinter import filedialog
 
 def get_acrobat_path():
     try:
@@ -114,8 +116,19 @@ def print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, 
     except Exception as e:
         print(f"Error: Unable to process Excel file. {e}")
 
+# Create tkinter root window
+root = tk.Tk()
+root.withdraw()  # Hide the main window
+
+# Open file dialog to select the file
+excel_file_path = filedialog.askopenfilename(title="Select File")
+
+# Close the tkinter root window
+root.destroy()
+
+
 # Replace 'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\your_excel_file.xlsx' with the actual path to your Excel file
-excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\temp.xlsx'
+#excel_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\temp.xlsx'
 
 # Specify the path to 'Data path barcode.xlsx'
 barcode_excel_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx'
@@ -127,3 +140,5 @@ acrobat_path = get_acrobat_path()
 
 # Print PDFs using the modified code
 print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, acrobat_path, printer_name)
+
+

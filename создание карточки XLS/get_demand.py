@@ -1,12 +1,10 @@
 import pandas as pd
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import filedialog, messagebox
 
-def sort_dataframe_by_artikul():
+
+def sort_dataframe_by_artikul(file_path):
     # Load the Excel file skipping the first row as header
-    file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\спрос с 25.01.2024 по 13.02.2024\13-2-2024 спрос с 25-1-2024 по 13-2-2024.xlsx'
-
-    # Load the 'Товары' sheet once
     df = pd.read_excel(file_path, sheet_name='Товары', header=1)
 
     # Extract required columns and create 'Num_Copies' column
@@ -26,19 +24,22 @@ def sort_dataframe_by_artikul():
 
     # Calculate 'Num_Copies' column in Python (B2*10)
     new_df['Num_Copies'] = new_df['ВБ СПРОС'] * 10
-    
+
     # Write to a new Excel file
     output_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\output_WB_demand.xlsx'
     new_df.to_excel(output_file_path, index=False)
 
+
 # Create tkinter root window
 root = tk.Tk()
+root.withdraw()  # Hide the main window
 
-# Hide the main window
-root.withdraw()
+# Open file dialog to select the file
+file_path = filedialog.askopenfilename(title="Select File")
 
-# Call the function to sort the DataFrame
-sort_dataframe_by_artikul()
+if file_path:
+    # Call the function to sort the DataFrame with the selected file
+    sort_dataframe_by_artikul(file_path)
 
 # Close the tkinter root window
 root.destroy()
