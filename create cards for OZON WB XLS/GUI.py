@@ -17,6 +17,9 @@ def run_script4():
 def run_script5():
     subprocess.Popen(["python", "print_bar_code.py"])
 
+def run_script6():
+    subprocess.Popen(["python", "photoshop_barcode.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -37,5 +40,8 @@ button4.pack()
 
 button5 = tk.Button(root, text="print_bar_code", command=run_script5)
 button5.pack()
+
+button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
+button6.pack()
 
 root.mainloop()
