@@ -26,6 +26,9 @@ root.title("Python Script Runner")
 # Set window size to 500x500
 root.geometry("500x500")
 
+button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
+button6.pack()
+
 button1 = tk.Button(root, text="output_data_for_Ozon", command=run_script1)
 button1.pack()
 
@@ -41,7 +44,6 @@ button4.pack()
 button5 = tk.Button(root, text="print_bar_code", command=run_script5)
 button5.pack()
 
-button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
-button6.pack()
+
 
 root.mainloop()

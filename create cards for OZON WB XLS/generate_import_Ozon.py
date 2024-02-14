@@ -3,9 +3,9 @@ import pandas as pd
 import shutil
 
 # Define paths
-template_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\создание карточки XLS\Ozon_template.xlsx'
-output_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\создание карточки XLS\output_data_for_Ozon.xlsx'
-data_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\создание карточки XLS\Data_to_create.xlsx'
+template_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\Ozon_template.xlsx'
+output_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\output_data_for_Ozon.xlsx'
+data_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\Data_to_create.xlsx'
 
 # Copy the original workbook to a new file
 shutil.copy(template_path, output_file_path)
@@ -18,6 +18,7 @@ df = pd.read_excel(data_path)
 
 # Access the desired sheet in the copied workbook
 ws_output = wb_output['Шаблон']
+ws_output2 = wb_output['Озон.Видео']
 # Get all column names
 column_names = [cell.value for cell in ws_output[2]]
 
@@ -46,9 +47,9 @@ price_col, _ = find_column(data_path, 'Лист1', 'Цена')
 vat_col, _ = find_column(data_path, 'Лист1', 'НДС, %*')
 promote_col, _ = find_column(data_path, 'Лист1', 'Включить продвижение')
 weight_col, _ = find_column(data_path, 'Лист1', 'Вес товара с упаковкой (г)')
-width_col, _ = find_column(data_path, 'Лист1', 'Ширина упаковки')
-height_col, _ = find_column(data_path, 'Лист1', 'Высота упаковки')
-lenght_col, _ = find_column(data_path, 'Лист1', 'Длина упаковки')
+width_col, _ = find_column(data_path, 'Лист1', 'Ширина упаковки, мм*')
+height_col, _ = find_column(data_path, 'Лист1', 'Высота упаковки, мм*')
+lenght_col, _ = find_column(data_path, 'Лист1', 'Длина упаковки, мм*')
 photo_main_col, _ = find_column(data_path, 'Лист1', 'Ссылка на главное фото*')
 photo_aditional_col, _ = find_column(data_path, 'Лист1', 'Ссылки на дополнительные фото')
 brand_col, _ = find_column(data_path, 'Лист1', 'Бренд')
@@ -60,6 +61,9 @@ country_col, _ = find_column(data_path, 'Лист1', 'Страна произв�
 material_col, _ = find_column(data_path, 'Лист1', 'Состав')
 color_example_col, _ = find_column(data_path, 'Лист1', 'Образец цвета')
 key_words_col, _ = find_column(data_path, 'Лист1', 'Ключевые слова')
+video_name_col, _ = find_column(data_path, 'Лист1', 'Озон.Видео: название')
+video_link_col, _ = find_column(data_path, 'Лист1', 'Озон.Видео: ссылка')
+
 print(article_col,price_col,vat_col,weight_col,width_col,height_col,lenght_col,photo_main_col,photo_aditional_col)
 
 print(f"Please Wait when its DONE....")
@@ -85,8 +89,10 @@ for i, row in enumerate(df.itertuples(), start=4):
     ws_output.cell(row=i, column=find_column(output_file_path, 'Шаблон', 'Материал')[0], value=row[material_col])
     ws_output.cell(row=i, column=find_column(output_file_path, 'Шаблон', 'Образец цвета')[0], value=row[color_example_col])
     ws_output.cell(row=i, column=find_column(output_file_path, 'Шаблон', 'Ключевые слова')[0], value=row[key_words_col])
-
+    ws_output2.cell(row=i, column=find_column(output_file_path, 'Озон.Видео', 'Озон.Видео: название')[0], value=row[video_name_col])
+    ws_output2.cell(row=i, column=find_column(output_file_path, 'Озон.Видео', 'Озон.Видео: ссылка')[0], value=row[video_link_col])
+    ws_output2.cell(row=i, column=find_column(output_file_path, 'Озон.Видео', 'Артикул*')[0], value=row[article_col])
 
 # Save the modified workbook
 wb_output.save(output_file_path)
-print(f"Done")
+print("Done")
