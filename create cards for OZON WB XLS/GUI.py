@@ -9,7 +9,7 @@ def run_script2():
     subprocess.Popen(["python", "generate_import_WB.py"])
 
 def run_script3():
-        subprocess.Popen(["python", "get_demand.py"])
+        subprocess.Popen(["python", "wb_get_demand.py"])
 
 def run_script4():
     subprocess.Popen(["python", "MainTop_print.py"])
@@ -32,7 +32,7 @@ button1.pack()
 button2 = tk.Button(root, text="output_data_for_WB", command=run_script2)
 button2.pack()
 
-button3 = tk.Button(root, text="get_demand file to Maintop", command=run_script3)
+button3 = tk.Button(root, text="WB get_demand file to Maintop", command=run_script3)
 button3.pack()
 
 button4 = tk.Button(root, text="MainTop_print", command=run_script4)
