@@ -1,8 +1,15 @@
 import os
 import pandas as pd
+from tkinter import Tk, filedialog
+
+# Prompt user to select the first Excel file
+root = Tk()
+root.withdraw()  # Hide the root window
+file1_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+root.destroy()  # Destroy the root window after file selection
 
 # Read the first Excel file
-file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г2.xlsx"
+#file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г2.xlsx"
 df1 = pd.read_excel(file1_path)
 
 # Read the second Excel file
