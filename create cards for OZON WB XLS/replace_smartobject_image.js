@@ -30,6 +30,8 @@ if (app.documents.length > 0) {
         return null; // No Smart Object found in the group
     }
 
+
+    
     // Check if layer is a group
     if (theLayer.typename != "LayerSet") {
         alert("Selected layer is not a group.");
@@ -57,34 +59,59 @@ if (app.documents.length > 0) {
             var theNewName = selectedFiles[m].name.match(/(.*)\.[^\.]+$/)[1];
             alert("selectedFiles[m].name: " + selectedFiles[m].name);
 
-            while (currentGroup = findGroupNamed(theLayer.layers, groupIndex.toString())) {
-                // Unhide current group
-                currentGroup.visible = true;
+            for (var groupIndex = 0; groupIndex < theLayer.layers.length; groupIndex++) {
+                var currentGroup = findGroupNamed(theLayer.layers, groupIndex.toString());
 
-                // Update smartObjectInGroup to reference the Smart Object layer in the current group
-                if (groupIndex === 1) {
-                        // Print currentGroup to the JavaScript Console
-                    //alert("Current Group: " + currentGroup.name);
-                    smartObjectInGroup = findSmartObject(currentGroup);
-                    //alert("smartObjectInGroup: " + smartObjectInGroup.name);
-                    // Replace SmartObject
-                    smartObjectInGroup = replaceContents(selectedFiles[m], smartObjectInGroup);
+                // If currentGroup is found
+                if (currentGroup) {
+                    // Unhide current group
+                    currentGroup.visible = true;
+
+                    // Update smartObjectInGroup to reference the Smart Object layer in the current group
+                    if (groupIndex === 1) {
+                        smartObjectInGroup = findSmartObject(currentGroup);
+                        smartObjectInGroup = replaceContents(selectedFiles[m], smartObjectInGroup);
+                    }
+
+                    // Set jpgSuffix
+                    var jpgSuffix = "_" + groupIndex + ".jpg";
+
+                    // JPG Options
+                    var jpgSaveOptions = new JPEGSaveOptions();
+                    jpgSaveOptions.embedColorProfile = true;
+                    jpgSaveOptions.formatOptions = FormatOptions.STANDARDBASELINE;
+                    jpgSaveOptions.matte = MatteType.NONE;
+                    jpgSaveOptions.quality = 8;
+
+                    // Save JPG
+                    var jpgSaveFile = new File(jpgSaveFolder + "/" + theNewName + jpgSuffix);
+                    myDocument.saveAs(jpgSaveFile, jpgSaveOptions, true, Extension.LOWERCASE);
+                    currentGroup.visible = false;
                 }
+            }
 
-                // Set jpgSuffix
-                var jpgSuffix = "_" + groupIndex + ".jpg";
+            // If the next group is not found, switch to the "А4" group
+            if (!currentGroup) {
+                // Check if there is an active document open
+                if (app.documents.length > 0) {
+                    var myDocument = app.activeDocument;
 
-                // JPG Options
-                var jpgSaveOptions = new JPEGSaveOptions();
-                jpgSaveOptions.embedColorProfile = true;
-                jpgSaveOptions.formatOptions = FormatOptions.STANDARDBASELINE;
-                jpgSaveOptions.matte = MatteType.NONE;
-                jpgSaveOptions.quality = 8;
+                    // Find the layer by name
+                    var exportLayer = myDocument.layers.getByName("export");
+                    alert("Group 'export' Selected.");
 
-                // Save JPG
-                var jpgSaveFile = new File(jpgSaveFolder + "/" + theNewName + jpgSuffix);
-                myDocument.saveAs(jpgSaveFile, jpgSaveOptions, true, Extension.LOWERCASE);
-                groupIndex++;
+                    // Check if the layer exists
+                    if (exportLayer) {
+                        // Set the found layer as active
+                        app.activeDocument.activeLayer = exportLayer;
+                    } else {
+                        // Alert if the layer doesn't exist
+                        alert("Layer 'export' not found.");
+                    }
+                } else {
+                    // Alert if no document is open
+                    alert("No document open in Photoshop.");
+                }
             }
          }
     }
