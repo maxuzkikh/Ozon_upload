@@ -5,7 +5,7 @@ if (app.documents.length > 0) {
     var theName = myDocument.name.match(/(.*)\.[^\.]+$/)[1];
     var thePath = myDocument.path;
     var theLayer = myDocument.activeLayer;
-    var selectedFilesForGroup1 = []; // Variable to store selected files for group "1"
+    var selectedFiles = []; // Variable to store selected files for group "1"
     var jpgSaveFolder; // Variable to store the selected folder to save JPG files
 
     // Function to find the group named "1", "2", "3", etc. within the selected group
@@ -19,34 +19,15 @@ if (app.documents.length > 0) {
         return null; // No group with the specified name found
     }
 
-    // Function to process group and replace Smart Object
-    function processGroup(group, jpgSaveOptions, jpgSuffix, selectedFiles) {
-        var smartObjectInGroup = null;
-        for (var j = 0; j < group.layers.length; j++) {
-            if (group.layers[j].kind == "LayerKind.SMARTOBJECT") {
-                smartObjectInGroup = group.layers[j];
-                break;
+    // Function to find the Smart Object layer within a group
+    function findSmartObject(group) {
+        for (var i = 0; i < group.layers.length; i++) {
+            var layer = group.layers[i];
+            if (layer.kind == LayerKind.SMARTOBJECT) {
+                return layer;
             }
         }
-
-        if (!smartObjectInGroup) {
-            alert("No Smart Object found within group '" + group.name + "'.");
-            return;
-        }
-
-        if (!selectedFiles || selectedFiles.length === 0) {
-            alert("No files selected.");
-            return;
-        }
-
-        for (var m = 0; m < selectedFiles.length; m++) {
-            // Replace SmartObject
-            smartObjectInGroup = replaceContents(selectedFiles[m], smartObjectInGroup);
-            var theNewName = selectedFiles[m].name.match(/(.*)\.[^\.]+$/)[1];
-            // Save JPG
-            var jpgSaveFile = new File(jpgSaveFolder + "/" + theNewName + jpgSuffix);
-            myDocument.saveAs(jpgSaveFile, jpgSaveOptions, true, Extension.LOWERCASE);
-        }
+        return null; // No Smart Object found in the group
     }
 
     // Check if layer is a group
@@ -60,33 +41,52 @@ if (app.documents.length > 0) {
             exit(); // Exit script
         }
 
+        // Initialize smartObjectInGroup to reference the first Smart Object layer in the group
+        var smartObjectInGroup = findSmartObject(theLayer);
+
         // Loop through groups dynamically
         var groupIndex = 1;
         var currentGroup;
-        while (currentGroup = findGroupNamed(theLayer.layers, groupIndex.toString())) {
-            // Unhide current group
-            currentGroup.visible = true;
 
-            // Set jpgSuffix
-            var jpgSuffix = "_" + groupIndex + ".jpg";
-
-            // JPG Options
-            var jpgSaveOptions = new JPEGSaveOptions();
-            jpgSaveOptions.embedColorProfile = true;
-            jpgSaveOptions.formatOptions = FormatOptions.STANDARDBASELINE;
-            jpgSaveOptions.matte = MatteType.NONE;
-            jpgSaveOptions.quality = 8;
-
-            // Prompt user to select files for the current group if not already selected
-            if (selectedFilesForGroup1.length === 0) {
-                selectedFilesForGroup1 = selectFiles("Please select files for group " + groupIndex);
-            }
-
-            // Process current group
-            processGroup(currentGroup, jpgSaveOptions, jpgSuffix, selectedFilesForGroup1);
-
-            groupIndex++;
+        // Prompt user to select files if not already selected
+        if (selectedFiles.length === 0) {
+            selectedFiles = selectFiles("Please select files for Smart Object ");
         }
+         for (var m = 0; m < selectedFiles.length; m++) {
+            //theLayer.typename = "LayerSet";
+            var theNewName = selectedFiles[m].name.match(/(.*)\.[^\.]+$/)[1];
+            alert("selectedFiles[m].name: " + selectedFiles[m].name);
+
+            while (currentGroup = findGroupNamed(theLayer.layers, groupIndex.toString())) {
+                // Unhide current group
+                currentGroup.visible = true;
+
+                // Update smartObjectInGroup to reference the Smart Object layer in the current group
+                if (groupIndex === 1) {
+                        // Print currentGroup to the JavaScript Console
+                    //alert("Current Group: " + currentGroup.name);
+                    smartObjectInGroup = findSmartObject(currentGroup);
+                    //alert("smartObjectInGroup: " + smartObjectInGroup.name);
+                    // Replace SmartObject
+                    smartObjectInGroup = replaceContents(selectedFiles[m], smartObjectInGroup);
+                }
+
+                // Set jpgSuffix
+                var jpgSuffix = "_" + groupIndex + ".jpg";
+
+                // JPG Options
+                var jpgSaveOptions = new JPEGSaveOptions();
+                jpgSaveOptions.embedColorProfile = true;
+                jpgSaveOptions.formatOptions = FormatOptions.STANDARDBASELINE;
+                jpgSaveOptions.matte = MatteType.NONE;
+                jpgSaveOptions.quality = 8;
+
+                // Save JPG
+                var jpgSaveFile = new File(jpgSaveFolder + "/" + theNewName + jpgSuffix);
+                myDocument.saveAs(jpgSaveFile, jpgSaveOptions, true, Extension.LOWERCASE);
+                groupIndex++;
+            }
+         }
     }
 }
 
@@ -108,6 +108,11 @@ function getFiles(theFile) {
 
 // Replace SmartObject Contents
 function replaceContents(newFile, theSO) {
+    if (theSO == null || theSO == undefined) {
+        alert("Smart Object not found.");
+        return null; // Return null if Smart Object not found
+    }
+
     app.activeDocument.activeLayer = theSO;
     // =======================================================
     var idplacedLayerReplaceContents = stringIDToTypeID("placedLayerReplaceContents");
