@@ -57,9 +57,9 @@ if (app.documents.length > 0) {
          for (var m = 0; m < selectedFiles.length; m++) {
             //theLayer.typename = "LayerSet";
             var theNewName = selectedFiles[m].name.match(/(.*)\.[^\.]+$/)[1];
-            alert("selectedFiles[m].name: " + selectedFiles[m].name);
+            //alert("selectedFiles[m].name: " + selectedFiles[m].name);
 
-            for (var groupIndex = 0; groupIndex < theLayer.layers.length; groupIndex++) {
+            for (var groupIndex = 0; groupIndex <= theLayer.layers.length; groupIndex++) {
                 var currentGroup = findGroupNamed(theLayer.layers, groupIndex.toString());
 
                 // If currentGroup is found
@@ -98,7 +98,7 @@ if (app.documents.length > 0) {
 
                     // Find the layer by name
                     var exportLayer = myDocument.layers.getByName("export");
-                    alert("Group 'export' Selected.");
+                    //alert("Group 'export' Selected.");
 
                     // Check if the layer exists
                     if (exportLayer) {
@@ -106,11 +106,11 @@ if (app.documents.length > 0) {
                         app.activeDocument.activeLayer = exportLayer;
                     } else {
                         // Alert if the layer doesn't exist
-                        alert("Layer 'export' not found.");
+                        //alert("Layer 'export' not found.");
                     }
                 } else {
                     // Alert if no document is open
-                    alert("No document open in Photoshop.");
+                    //alert("No document open in Photoshop.");
                 }
             }
          }
