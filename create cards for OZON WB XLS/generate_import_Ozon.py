@@ -1,11 +1,20 @@
 import openpyxl
 import pandas as pd
 import shutil
+import tkinter as tk
+from tkinter import filedialog
+import os  # Import the os module
+
+# Create a Tkinter root window
+root = tk.Tk()
+root.withdraw()  # Hide the root window
+
+# Ask the user to select the data file
+data_path = filedialog.askopenfilename(title="Select Data File", filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")])
 
 # Define paths
 template_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\Ozon_template.xlsx'
-output_file_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\output_data_for_Ozon.xlsx'
-data_path = r'C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\Data_to_create.xlsx'
+output_file_path = os.path.splitext(data_path)[0] + "_output_data_for_Ozon.xlsx"
 
 # Copy the original workbook to a new file
 shutil.copy(template_path, output_file_path)
