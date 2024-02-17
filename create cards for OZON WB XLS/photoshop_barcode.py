@@ -110,15 +110,20 @@ for filename in os.listdir(folder_path):
 
         # Select the "output" folder for saving
         #choose_folder()
-        #pyautogui.typewrite(output_folder)
+        modified_string = output_folder.replace("/", "\\")
+        #pyautogui.typewrite(modified_string)
 
         # Confirm the selection
         pyautogui.press('enter')
-        time.sleep(0.3)
+        time.sleep(0.4)
         pyautogui.press('enter')
-        time.sleep(0.3)
+        time.sleep(0.4)
         pyautogui.press('enter')
-        time.sleep(0.3)
+        time.sleep(0.4)
+        pyautogui.press('enter')
+        time.sleep(0.4)
+        pyautogui.press('enter')
+        time.sleep(0.4)
         pyautogui.press('enter')
 
         # New file name after renaming
