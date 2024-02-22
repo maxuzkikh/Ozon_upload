@@ -10,12 +10,6 @@ import tkinter as tk
 from tkinter import filedialog
 import os  # Import the os module
 
-# Create a Tkinter root window
-root = tk.Tk()
-root.withdraw()  # Hide the root window
-
-# Ask the user to select the data file
-#wb_demand_df = filedialog.askopenfilename(title="Select Data File", filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")])
 
 # Signal handler function
 def signal_handler(sig, frame):
