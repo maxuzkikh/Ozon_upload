@@ -217,7 +217,7 @@ def process_image(print_path, rotate=False, layout_width=None):
         pyautogui.mouseDown(button='left')
 
         # Drag the mouse cursor upwards by 200 pixels
-        pyautogui.dragRel(0, -15, duration=0.2)  # Specify the distance and duration as per your requirement
+        pyautogui.dragRel(0, -offset_mouse, duration=0.2)  # Specify the distance and duration as per your requirement
         pyautogui.keyUp('ctrl')
 
 
@@ -233,14 +233,15 @@ if os.path.exists(file_path):
 
 
     # Initialize offset to -100
-    offset = -12000
+    offset = -12500
+    offset_mouse = 0
     start = 0
 
 
 
 
     # Read the WB_demand.xlsx file
-    wb_demand_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\WB_A4_demand2.xlsx")
+    wb_demand_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\10.03.2024\toMainTop.xlsx")
 
     # Read the Data path barcode.xlsx file
     barcode_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx")
@@ -303,6 +304,8 @@ if os.path.exists(file_path):
             # Check if Num_Copies is 0, then skip
             if pd.isnull(num_copies) or num_copies == 0 or num_copies < 0:
                 print(f"Skipping article {article} as Num_Copies is 0.")
+
+
                 continue
         else:
             print(f"Article {article} not found in wb_demand_df. Skipping.")
@@ -316,5 +319,7 @@ if os.path.exists(file_path):
             time.sleep(1)
 
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
-        offset += 100  # Increment offset for the next iteration
+        offset += 40  # Increment offset for the next iteration
+        offset_mouse=5*(num_copies+0)
+        print("offset_mouse",offset_mouse)
         start += 1
