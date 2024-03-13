@@ -25,6 +25,8 @@ def run_script7():
 
 def run_script8():
     subprocess.Popen(["python", "find_barcode_from_file.py"])
+def run_script9():
+    subprocess.Popen(["python", "sort_by_type.py"])
 
 root = tk.Tk()
 root.title("Python Script Runner")
@@ -55,6 +57,9 @@ button7.pack()
 
 button8 = tk.Button(root, text="find_barcode_from_file", command=run_script8)
 button8.pack()
+
+button9 = tk.Button(root, text="sort_by_type", command=run_script9)
+button9.pack()
 
 
 

@@ -9,7 +9,18 @@ import pandas as pd
 import tkinter as tk
 from tkinter import filedialog
 import os  # Import the os module
+from tkinter import Tk, filedialog
 
+
+# Prompt user to select the first Excel file
+root = Tk()
+root.withdraw()  # Hide the root window
+file1_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+root.destroy()  # Destroy the root window after file selection
+
+# Read the first Excel file
+#file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г2.xlsx"
+df1 = pd.read_excel(file1_path)
 
 # Signal handler function
 def signal_handler(sig, frame):
@@ -66,7 +77,7 @@ def process_image(print_path, rotate=False, layout_width=None):
 
 
 
-    # Раскладка Copy in width!!! Window 0,100px
+    # Раскладка Copy in width!!! Window 0,200px
     #layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
     if layout_width>1:
         # Press 'm' key
@@ -80,7 +91,7 @@ def process_image(print_path, rotate=False, layout_width=None):
         pyautogui.typewrite('0')
         time.sleep(0.07)
         pyautogui.doubleClick(930, 190)
-        pyautogui.typewrite('100')
+        pyautogui.typewrite('200')
         time.sleep(0.07)
         # Copy Button
         pyautogui.click(1000, 360)
@@ -145,7 +156,7 @@ def process_image(print_path, rotate=False, layout_width=None):
     pyautogui.typewrite('0')
     time.sleep(0.07)
     pyautogui.doubleClick(1024, 189)
-    pyautogui.typewrite('100')
+    pyautogui.typewrite('200')
 
     # Get the number of copies from the corresponding cell in the "Num_Copies" column
     num_copies_raw = wb_demand_df.loc[wb_demand_df["Артикул"] == article, "Num_Copies"].values[0]
@@ -233,7 +244,7 @@ if os.path.exists(file_path):
 
 
     # Initialize offset to -100
-    offset = -12500
+    offset = -16000
     offset_mouse = 0
     start = 0
 
@@ -241,8 +252,8 @@ if os.path.exists(file_path):
 
 
     # Read the WB_demand.xlsx file
-    wb_demand_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\10.03.2024\toMainTop.xlsx")
-
+    #wb_demand_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\MainTop\10.03.2024\toMainTop.xlsx")
+    wb_demand_df = df1
     # Read the Data path barcode.xlsx file
     barcode_df = pd.read_excel(r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx")
 
