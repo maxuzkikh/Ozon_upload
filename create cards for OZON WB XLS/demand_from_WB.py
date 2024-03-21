@@ -7,7 +7,7 @@ import os
 # Function to calculate 'отправить' column
 def calculate_send(row):
     try:
-        orders = float(row['Среднее количество заказов в день, шт (предыдущий период)'])
+        orders = float(row['Среднее количество заказов в день, шт'])
         days = float(row['дней'])
         stock = float(row['Остатки склад, шт'])
 
@@ -21,7 +21,7 @@ def calculate_send(row):
 
 # Function to fill 'дней' column
 def fill_days(row):
-    return 40
+    return 30
 
 
 # Function to fill 'сумма' column
@@ -42,7 +42,7 @@ try:
     df = pd.read_excel(filename, sheet_name='Товары', header=1)  # Assuming headers start from the second row
 
     # Select required columns
-    df = df[['Артикул продавца', 'Среднее количество заказов в день, шт (предыдущий период)', 'Остатки склад, шт']]
+    df = df[['Артикул продавца', 'Среднее количество заказов в день, шт', 'Остатки склад, шт']]
 
     # Calculate 'отправить' column
     df['дней'] = df.apply(fill_days, axis=1)  # Fill 'дней' column first

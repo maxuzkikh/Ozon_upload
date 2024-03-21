@@ -244,7 +244,7 @@ if os.path.exists(file_path):
 
 
     # Initialize offset to -100
-    offset = -16000
+    offset = -14500
     offset_mouse = 0
     start = 0
 
