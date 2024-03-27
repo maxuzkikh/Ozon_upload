@@ -120,7 +120,7 @@ if (app.documents.length > 0) {
 // Function to select files
 function selectFiles(dialogTitle) {
     if ($.os.search(/windows/i) != -1) {
-        return File.openDialog(dialogTitle, "*.psd;*.tif;*.jpg", true)
+        return File.openDialog(dialogTitle, "*.png;*.psd;*.tif;*.jpg", true)
     } else {
         return File.openDialog(dialogTitle, getFiles, true)
     };
