@@ -18,7 +18,7 @@ if (app.documents.length > 0) {
     } else {
         // Select Files;
         if ($.os.search(/windows/i) != -1) {
-            var theFiles = File.openDialog("please select files", "*.psd;*.tif;*.jpg", true)
+            var theFiles = File.openDialog("please select files", "*.psd;*.png;*.tif;*.jpg", true)
         } else {
             var theFiles = File.openDialog("please select files", getFiles, true)
         };
