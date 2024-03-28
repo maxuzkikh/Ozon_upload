@@ -12,9 +12,19 @@ root.destroy()  # Destroy the root window after file selection
 #file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г2.xlsx"
 df1 = pd.read_excel(file1_path)
 
-# Read the second Excel file
-file2_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\create cards for OZON WB XLS\delete.xlsx"
+# Prompt user to select the first Excel file
+root = Tk()
+root.withdraw()  # Hide the root window
+file2_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+root.destroy()  # Destroy the root window after file selection
+
+# Read the first Excel file
+#file1_path = r"C:\work\OZON_products\поставки\07.02.2024\WB_demand_г2.xlsx"
 df2 = pd.read_excel(file2_path)
+
+# Read the second Excel file
+#file2_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\Tatulya\create cards\штрихкоды.xlsx"
+#df2 = pd.read_excel(file2_path)
 
 # Merge data based on column "Артикул"
 merged_df = pd.merge(df1, df2[['Артикул', 'штрихкод']], on='Артикул', how='left')
