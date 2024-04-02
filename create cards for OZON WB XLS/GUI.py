@@ -30,6 +30,9 @@ def run_script9():
 def run_script10():
     subprocess.Popen(["python", "demand_from_WB.py"])
 
+def run_script11():
+    subprocess.Popen(["python", "photoshop_barcode_tati.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -38,6 +41,9 @@ root.geometry("500x500")
 
 button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
 button6.pack()
+
+button11 = tk.Button(root, text="photoshop_barcode_tati.py", command=run_script11)
+button11.pack()
 
 button1 = tk.Button(root, text="output_data_for_Ozon", command=run_script1)
 button1.pack()
