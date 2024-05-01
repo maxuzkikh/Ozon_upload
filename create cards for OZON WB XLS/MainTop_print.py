@@ -39,18 +39,18 @@ def process_image(print_path, rotate=False, layout_width=None):
     if start == 0:
         time.sleep(3)
 
-    time.sleep(0.09)
+    time.sleep(0.16)
     # Copy the text to the clipboard
     pyperclip.copy(print_path)
-    time.sleep(0.09)
+    time.sleep(0.16)
     # Simulate Ctrl+V to paste the text
     pyautogui.hotkey('ctrl', 'v')
-    time.sleep(0.09)
+    time.sleep(0.16)
     # Press Enter to confirm
     pyautogui.press('enter')
     # Press Enter to confirm
     pyautogui.press('enter')
-    time.sleep(0.09)
+    time.sleep(0.16)
     # Pick Tool
     pyautogui.click(30, 100)
     pyautogui.moveTo(820, 450)
@@ -331,6 +331,6 @@ if os.path.exists(file_path):
 
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
         offset += 40  # Increment offset for the next iteration
-        offset_mouse=5.5*(num_copies+0)
+        offset_mouse=5.2*(num_copies+0)
         print("offset_mouse",offset_mouse)
         start += 1
