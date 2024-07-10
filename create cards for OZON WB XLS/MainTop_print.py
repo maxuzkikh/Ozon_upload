@@ -69,11 +69,11 @@ def process_image(print_path, rotate=False, layout_width=None):
         pyautogui.keyUp('shift')
         pyautogui.mouseUp()
         pyautogui.keyDown('ctrl')
-        time.sleep(0.09)
+        time.sleep(0.12)
         # Pick Tool
         pyautogui.click(30, 100)
         pyautogui.moveTo(945, 540)
-        time.sleep(0.09)
+        time.sleep(0.12)
 
 
 
@@ -81,45 +81,45 @@ def process_image(print_path, rotate=False, layout_width=None):
     #layout_width = worksheet.cell(row=row, column=column_indices.get("Раскладка в ширину")).value
     if layout_width>1:
         # Press 'm' key
-        time.sleep(0.09)
+        time.sleep(0.12)
         pyautogui.keyDown('ctrl')
         pyautogui.press('m')
         pyautogui.keyUp('ctrl')
         # Zero values
-        time.sleep(0.09)
+        time.sleep(0.12)
         pyautogui.doubleClick(1020, 190)
         pyautogui.typewrite('0')
-        time.sleep(0.09)
+        time.sleep(0.12)
         pyautogui.doubleClick(930, 190)
         pyautogui.typewrite('200')
-        time.sleep(0.09)
+        time.sleep(0.12)
         # Copy Button
         pyautogui.click(1000, 360)
-        time.sleep(0.09)
+        time.sleep(0.12)
         # Pick Tool
         pyautogui.click(30, 100)
         pyautogui.moveTo(945, 540)
-        time.sleep(0.09)
+        time.sleep(0.12)
         # Select images
         pyautogui.mouseDown()
         pyautogui.dragTo(1015, 571, duration=0.2)
         # close Copy window
         pyautogui.click(1058, 366)
-        time.sleep(0.09)
+        time.sleep(0.12)
 
         # Align in width
         # Open window Align
         pyautogui.click(500, 70)
         pyautogui.doubleClick(235, 163)
         pyautogui.typewrite('4')
-        time.sleep(0.09)
+        time.sleep(0.12)
         # Align 4mm width
         pyautogui.click(197, 163)
         pyautogui.hotkey('ctrl', 'g')
-        time.sleep(0.09)
+        time.sleep(0.12)
         # Align to center of document
         pyautogui.click(284, 141)
-        time.sleep(0.09)
+        time.sleep(0.12)
 
 
     #time.sleep(3)
@@ -130,15 +130,16 @@ def process_image(print_path, rotate=False, layout_width=None):
 
     # Open window Align
     pyautogui.click(500, 70)
-    time.sleep(0.09)
+    time.sleep(0.12)
     # Click Center of Aplication
     pyautogui.click(982, 555)
+    time.sleep(0.12)
     # Align to center of document
     pyautogui.click(284, 141)
-    time.sleep(0.09)
+    time.sleep(0.12)
     # Close window
     pyautogui.click(280, 111)
-    time.sleep(0.09)
+    time.sleep(0.12)
     # Click Center of Aplication
     pyautogui.click(982, 555)
 
@@ -147,14 +148,14 @@ def process_image(print_path, rotate=False, layout_width=None):
     # Click Center of Aplication
     pyautogui.click(982, 555)
     # Open window Copys
-    time.sleep(0.09)
+    time.sleep(0.12)
     pyautogui.keyDown('ctrl')
     pyautogui.press('m')
     pyautogui.keyUp('ctrl')
-    time.sleep(0.09)
+    time.sleep(0.12)
     pyautogui.doubleClick(943, 185)
     pyautogui.typewrite('0')
-    time.sleep(0.09)
+    time.sleep(0.12)
     pyautogui.doubleClick(1024, 189)
     pyautogui.typewrite('200')
 
@@ -176,26 +177,26 @@ def process_image(print_path, rotate=False, layout_width=None):
             print("COPY")
             pyautogui.click(1000, 364)
             # Optionally, add a small delay between clicks for stability
-            time.sleep(0.09)
+            time.sleep(0.12)
 
-    time.sleep(0.09)
+    time.sleep(0.12)
     # close window
     pyautogui.click(1071, 364)
 
     if start == 0:
         # Move images first image UP
-        time.sleep(0.09)
+        time.sleep(0.12)
         pyautogui.keyDown('ctrl')
         pyautogui.press('m')
         pyautogui.keyUp('ctrl')
-        time.sleep(0.09)
+        time.sleep(0.12)
         pyautogui.doubleClick(943, 185)
         pyautogui.typewrite('0')
-        time.sleep(0.09)
+        time.sleep(0.12)
         pyautogui.doubleClick(1024, 189)
         pyautogui.typewrite(str(offset))
         pyautogui.click(920, 360)
-        time.sleep(0.09)
+        time.sleep(0.12)
         # close window
         pyautogui.click(1071, 364)
 
@@ -208,13 +209,13 @@ def process_image(print_path, rotate=False, layout_width=None):
     pyautogui.click(500, 70)
     pyautogui.doubleClick(223, 209)
     pyautogui.typewrite('5')
-    time.sleep(0.09)
+    time.sleep(0.12)
     # Align 5mm height
     pyautogui.click(196, 209)
-    time.sleep(0.09)
+    time.sleep(0.12)
     # Close window
     pyautogui.click(280, 111)
-    time.sleep(0.09)
+    time.sleep(0.12)
     # Click Center of Aplication
     pyautogui.click(982, 555)
 
@@ -244,7 +245,6 @@ if os.path.exists(file_path):
 
 
     # Initialize offset to -100
-    offset = -14500
     offset_mouse = 0
     start = 0
 
@@ -328,9 +328,11 @@ if os.path.exists(file_path):
             time.sleep(1)
             sys.exit(0)
             time.sleep(1)
-
+        # Now calculate the offset
+        offset = -14580 - num_copies * 100
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
         offset += 40  # Increment offset for the next iteration
-        offset_mouse=5.2*(num_copies+0)
+        offset_mouse=4.0*(num_copies+0)
         print("offset_mouse",offset_mouse)
         start += 1
+
