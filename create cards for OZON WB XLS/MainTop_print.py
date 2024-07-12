@@ -157,6 +157,8 @@ def process_image(print_path, rotate=False, layout_width=None):
     pyautogui.typewrite('0')
     time.sleep(0.12)
     pyautogui.doubleClick(1024, 189)
+    pyautogui.press('backspace')
+    pyautogui.press('backspace')
     pyautogui.typewrite('200')
 
     # Get the number of copies from the corresponding cell in the "Num_Copies" column
@@ -194,6 +196,8 @@ def process_image(print_path, rotate=False, layout_width=None):
         pyautogui.typewrite('0')
         time.sleep(0.12)
         pyautogui.doubleClick(1024, 189)
+        pyautogui.press('backspace')
+        pyautogui.press('backspace')
         pyautogui.typewrite(str(offset))
         pyautogui.click(920, 360)
         time.sleep(0.12)
@@ -329,7 +333,7 @@ if os.path.exists(file_path):
             sys.exit(0)
             time.sleep(1)
         # Now calculate the offset
-        offset = -14580 - num_copies * 100
+        offset = -15580 - num_copies * 100
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
         offset += 40  # Increment offset for the next iteration
         offset_mouse=4.0*(num_copies+0)
