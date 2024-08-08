@@ -30,9 +30,11 @@ def run_script9():
 def run_script10():
     subprocess.Popen(["python", "demand_from_WB.py"])
 
+
 def run_script11():
     subprocess.Popen(["python", "photoshop_barcode_tati.py"])
-
+def run_script12():
+    subprocess.Popen(["python", "Riin_printing.py"])
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -72,6 +74,8 @@ button9.pack()
 button10 = tk.Button(root, text="demand_from_WB", command=run_script10)
 button10.pack()
 
+button12 = tk.Button(root, text="Riin_printing", command=run_script12)
+button12.pack()
 
 
 root.mainloop()
