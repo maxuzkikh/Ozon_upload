@@ -6,6 +6,10 @@ import time
 import pandas as pd
 import pyperclip
 from tkinter import Tk, filedialog
+import shutil
+from datetime import datetime
+
+from tkinter import messagebox
 
 def choose_excel_file():
     root = Tk()
@@ -18,16 +22,19 @@ def choose_excel_file():
     root.destroy()
     return file_path
 
+
 def find_path_barcode(articul, barcode_df):
     matching_row = barcode_df.loc[barcode_df['Артикул'] == articul]
     if not matching_row.empty:
         return matching_row.iloc[0]['путь к печати'], matching_row.iloc[0].get('Rotate', 0)
     return None, 0
 
+
 def ensure_correct_file_extension(file_path, expected_extension=".tif"):
     if not file_path.endswith(expected_extension):
         file_path += expected_extension
     return file_path
+
 
 def main():
     # Prompt the user to choose the first Excel file
@@ -54,18 +61,26 @@ def main():
 
     # Ensure the necessary columns exist in both DataFrames
     if articul_column in df.columns and copies_column in df.columns and articul_column in barcode_df.columns and path_column in barcode_df.columns:
-        # Open the Template - RIIN file with the default application once at the start
-        print("Opening the Template - RIIN file...")
-        template_path = r"C:\work\Template30cm.rcf"  # Adjust this path to your Template - RIIN file
-        subprocess.run(["start", template_path], shell=True)
+        # Create a copy of the Template - RIIN file with a timestamp
+        original_template_path = r"C:\work\Template30cm.rcf"
+        timestamp = datetime.now().strftime("data%d.%m.%Y_time%H.%M")
+        new_template_path = f"C:\\work\\Template30cm_{timestamp}.rcf"
+        shutil.copy(original_template_path, new_template_path)
+        print(f"Copied Template30cm.rcf to {new_template_path}")
+
+        # Open the copied Template - RIIN file with the default application
+        print("Opening the copied Template - RIIN file...")
+        subprocess.run(["start", new_template_path], shell=True)
 
         # Wait for a few seconds to ensure the file is opened
-        print("Waiting for the Template - RIIN file to open...")
+        print("Waiting for the copied Template - RIIN file to open...")
         time.sleep(8)
 
-        # Bring the application window to the front
-        print("Searching for the window 'Template30cm - RIIN'...")
-        window = gw.getWindowsWithTitle("Template30cm - RIIN")
+        # Format the window title to include the actual timestamp
+        window_title = f"Template30cm_{timestamp} - RIIN"
+        print(f"Searching for the window '{window_title}'...")
+        window = gw.getWindowsWithTitle(window_title)
+
         if window:
             print("Window found. Bringing it to the front...")
             window[0].activate()
@@ -87,45 +102,62 @@ def main():
                 if file_path and os.path.exists(file_path):
                     # Simulate Ctrl+O keypress to open the file dialog
                     print("Simulating Ctrl+O keypress...")
-                    time.sleep(0.7)
+                    time.sleep(0.4)
                     pyautogui.hotkey('ctrl', 'o')
                     print("Ctrl+O keypress simulated.")
 
                     # Wait for the file dialog to open
-                    time.sleep(0.7)
+                    time.sleep(0.4)
 
                     # Copy the file path to the clipboard and type it out
                     print(f"Pasting the file path: {file_path}")
                     pyperclip.copy(file_path)  # Copy file path to clipboard
-                    time.sleep(0.7)
+                    time.sleep(0.4)
                     pyautogui.hotkey('ctrl', 'v')  # Paste the file path from clipboard
                     pyautogui.press('enter')  # Press Enter to open the file
-                    time.sleep(0.7)
+                    time.sleep(0.4)
                     pyautogui.press('enter')
-                    time.sleep(0.7)
-
+                    time.sleep(0.4)
+                    # Click on the specific location (920, 20) for a different purpose
+                    pyautogui.click(920, 20)
+                    time.sleep(0.4)
+                    
                     # Rotate if needed
                     if rotate == 1:
                         # Click 525, 975 pixels
                         pyautogui.click(525, 975)
                         print("Rotated")
-                        time.sleep(0.5)
+                        time.sleep(0.7)
 
-                    # Click on the specific location (920, 20) for a different purpose
-                    pyautogui.click(920, 20)
-                    time.sleep(0.3)
-                    pyautogui.hotkey('ctrl', 'c')
-                    pyautogui.rightClick(1092, 427)
-                    pyautogui.click(1169, 586)
-                    time.sleep(0.1)
-                    pyautogui.write(str(4))
-                    time.sleep(0.3)
-                    pyautogui.doubleClick(931, 470)
-                    c = int(copies/2 - 1)
-                    pyautogui.write(str(c))
-                    time.sleep(0.3)
-                    pyautogui.press('enter')
-                    time.sleep(1)
+
+                    c = int(copies / 2 - 1)
+                    print(c)
+                    if c > 0 :
+                        print("COPY times ",c)
+                        time.sleep(0.3)
+                        # Click on the specific location (920, 20) for a different purpose
+                        pyautogui.click(920, 20)
+                        time.sleep(0.5)
+                        pyautogui.hotkey('ctrl', 'c')
+                        pyautogui.rightClick(1092, 427)
+                        pyautogui.click(1169, 586)
+                        time.sleep(0.5)
+                        pyautogui.write(str(4))
+                        time.sleep(0.5)
+                        pyautogui.doubleClick(936, 416)
+                        time.sleep(0.5)
+                        pyautogui.write(str(5))
+                        time.sleep(0.5)
+                        pyautogui.doubleClick(931, 470)
+
+                        pyautogui.write(str(c))
+                        time.sleep(0.4)
+                        pyautogui.press('enter')
+                        time.sleep(1.5)
+                        # Click on the specific location (920, 20) for a different purpose
+                        pyautogui.click(920, 20)
+                        time.sleep(0.4)
+
 
                     # Align to Center Button
                     print("Align to Center Button")
@@ -133,17 +165,42 @@ def main():
                     time.sleep(0.5)
 
                     # Select all images
-                    #pyautogui.moveTo(745, 190)
-                    #pyautogui.mouseDown()
-                    #pyautogui.dragTo(1160, 985, duration=0.5)
+                    # pyautogui.moveTo(745, 190)
+                    # pyautogui.mouseDown()
+                    # pyautogui.dragTo(1160, 985, duration=0.5)
 
                     # Click on the specific location (920, 20) for a different purpose
                     pyautogui.click(920, 20)
-                    time.sleep(0.2)
+                    time.sleep(0.4)
+
+
+            # Click on the specific location (920, 20) for a different purpose
+            pyautogui.click(920, 20)
+            time.sleep(0.4)
+            # Select all images
+            pyautogui.moveTo(745, 190)
+            pyautogui.mouseDown()
+            pyautogui.dragTo(1160, 985, duration=0.5)
+            time.sleep(0.1)
+            #vertical spaces 5mm
+            #pyautogui.click(456, 943)
+            #time.sleep(0.5)
+            #pyautogui.doubleClick(353, 818)
+            #time.sleep(0.5)
+            #pyautogui.write(str(4))
+            #time.sleep(0.5)
+            #pyautogui.doubleClick(353, 859)
+            #time.sleep(0.5)
+            #pyautogui.write(str(5))
+            #time.sleep(0.5)
+            #pyautogui.press('enter')
+            #time.sleep(2)
 
             # Additional operations after processing all rows
-
-            time.sleep(0.1)
+            # Click on the specific location (920, 20) for a different purpose
+            pyautogui.click(920, 20)
+            time.sleep(0.4)
+            time.sleep(0.3)
             pyautogui.click(140, 60)
             time.sleep(0.3)
             pyautogui.click(791, 756)
@@ -155,29 +212,43 @@ def main():
             pyautogui.press('enter')
             time.sleep(0.3)
             pyautogui.press('esc')
-            time.sleep(0.1)
+            time.sleep(0.3)
+            
             # Select all images
             pyautogui.moveTo(745, 190)
             pyautogui.mouseDown()
             pyautogui.dragTo(1160, 985, duration=0.5)
-            time.sleep(0.1)
+            time.sleep(0.3)
+            # Click on the specific location (920, 20) for a different purpose
+            pyautogui.click(920, 20)
+            time.sleep(0.2)
+            # Align to Center Button
+            #print("Align to Center Button")
+            #pyautogui.click(665, 940)
+            #time.sleep(0.5)
+
+            # Select all images
+            pyautogui.moveTo(745, 190)
+            pyautogui.mouseDown()
+            pyautogui.dragTo(1160, 985, duration=0.5)
+            time.sleep(0.3)
             pyautogui.hotkey('ctrl', 'g')
-            #Copy
+            # Copy
             pyautogui.hotkey('ctrl', 'c')
-            time.sleep(0.1)
+            time.sleep(0.4)
             pyautogui.rightClick(1092, 427)
-            time.sleep(0.1)
+            time.sleep(0.4)
             pyautogui.click(1169, 586)
-            time.sleep(0.1)
-            pyautogui.write(str(11))
-            time.sleep(0.1)
+            time.sleep(0.4)
+            pyautogui.write(str(14))
+            time.sleep(0.4)
             time.sleep(0.3)
             pyautogui.doubleClick(931, 470)
             pyautogui.write(str(1))
             time.sleep(0.3)
             pyautogui.press('enter')
             time.sleep(1)
-            
+
             # Click on the specific location (920, 20) for a different purpose
             pyautogui.click(920, 20)
             time.sleep(0.2)
@@ -185,12 +256,25 @@ def main():
             print("Align to Center Button")
             pyautogui.click(665, 940)
             time.sleep(0.5)
-            
+            # Select all images
+            pyautogui.moveTo(745, 190)
+            pyautogui.mouseDown()
+            pyautogui.dragTo(1160, 985, duration=0.5)
+            time.sleep(0.3)
+            # Align to Center Button
+            print("Align to Center Button")
+            pyautogui.click(665, 940)
+            time.sleep(0.5)
+            # Show a message box when the script finishes
+            messagebox.showinfo("Process Complete","Delete LINES GUIEDS or it will be printed! Process Complete")
+
 
         else:
             print(f"The window 'Template30cm - RIIN' was not found.")
     else:
         print(f"One or more necessary columns are missing in the Excel files.")
+
+
 
 if __name__ == "__main__":
     main()

@@ -87,29 +87,29 @@ def main():
                 if file_path and os.path.exists(file_path):
                     # Simulate Ctrl+O keypress to open the file dialog
                     print("Simulating Ctrl+O keypress...")
-                    time.sleep(2)
+                    time.sleep(0.7)
                     pyautogui.hotkey('ctrl', 'o')
                     print("Ctrl+O keypress simulated.")
 
                     # Wait for the file dialog to open
-                    time.sleep(2)
+                    time.sleep(0.7)
 
                     # Copy the file path to the clipboard and type it out
                     print(f"Pasting the file path: {file_path}")
                     pyperclip.copy(file_path)  # Copy file path to clipboard
-                    time.sleep(2)
+                    time.sleep(0.7)
                     pyautogui.hotkey('ctrl', 'v')  # Paste the file path from clipboard
                     pyautogui.press('enter')  # Press Enter to open the file
-                    time.sleep(2)
+                    time.sleep(0.7)
                     pyautogui.press('enter')
-                    time.sleep(1)
+                    time.sleep(0.7)
 
                     # Rotate if needed
                     if rotate == 1:
                         # Click 525, 975 pixels
                         pyautogui.click(525, 975)
                         print("Rotated")
-                        time.sleep(0.3)
+                        time.sleep(0.5)
 
                     # Click on the specific location (920, 20) for a different purpose
                     pyautogui.click(920, 20)
@@ -117,8 +117,12 @@ def main():
                     pyautogui.hotkey('ctrl', 'c')
                     pyautogui.rightClick(1092, 427)
                     pyautogui.click(1169, 586)
-                    time.sleep(0.1)
+                    time.sleep(0.3)
                     pyautogui.write(str(4))
+                    time.sleep(0.3)
+                    pyautogui.doubleClick(936, 416)
+                    time.sleep(0.3)
+                    pyautogui.write(str(5))
                     time.sleep(0.3)
                     pyautogui.doubleClick(931, 470)
                     c = int(copies/2 - 1)
@@ -169,7 +173,7 @@ def main():
             time.sleep(0.1)
             pyautogui.click(1169, 586)
             time.sleep(0.1)
-            pyautogui.write(str(15))
+            pyautogui.write(str(14))
             time.sleep(0.1)
             time.sleep(0.3)
             pyautogui.doubleClick(931, 470)
