@@ -102,7 +102,7 @@ def main():
                 if file_path and os.path.exists(file_path):
                     # Simulate Ctrl+O keypress to open the file dialog
                     print("Simulating Ctrl+O keypress...")
-                    time.sleep(0.4)
+                    #time.sleep(0.4)
                     pyautogui.hotkey('ctrl', 'o')
                     print("Ctrl+O keypress simulated.")
 
@@ -112,126 +112,90 @@ def main():
                     # Copy the file path to the clipboard and type it out
                     print(f"Pasting the file path: {file_path}")
                     pyperclip.copy(file_path)  # Copy file path to clipboard
-                    time.sleep(0.4)
+                    time.sleep(0.2)
                     pyautogui.hotkey('ctrl', 'v')  # Paste the file path from clipboard
                     pyautogui.press('enter')  # Press Enter to open the file
-                    time.sleep(0.4)
+                    time.sleep(0.2)
                     pyautogui.press('enter')
-                    time.sleep(0.4)
+                    time.sleep(1.7)
                     # Click on the specific location (920, 20) for a different purpose
                     pyautogui.click(920, 20)
-                    time.sleep(0.4)
+                    time.sleep(0.2)
                     
                     # Rotate if needed
                     if rotate == 1:
                         # Click 525, 975 pixels
                         pyautogui.click(525, 975)
                         print("Rotated")
-                        time.sleep(0.7)
+                        time.sleep(1.7)
 
 
                     c = int(copies / 2 - 1)
                     print(c)
                     if c > 0 :
                         print("COPY times ",c)
-                        time.sleep(0.3)
+                        time.sleep(0.2)
                         # Click on the specific location (920, 20) for a different purpose
                         pyautogui.click(920, 20)
-                        time.sleep(0.5)
+                        time.sleep(0.2)
                         pyautogui.hotkey('ctrl', 'c')
                         pyautogui.rightClick(1092, 427)
                         pyautogui.click(1169, 586)
-                        time.sleep(0.5)
+                        time.sleep(0.2)
                         pyautogui.write(str(4))
-                        time.sleep(0.5)
+                        time.sleep(0.2)
                         pyautogui.doubleClick(936, 416)
-                        time.sleep(0.5)
+                        time.sleep(0.2)
                         pyautogui.write(str(5))
-                        time.sleep(0.5)
+                        time.sleep(0.2)
                         pyautogui.doubleClick(931, 470)
 
                         pyautogui.write(str(c))
-                        time.sleep(0.4)
+                        time.sleep(0.3)
                         pyautogui.press('enter')
-                        time.sleep(1.5)
+                        time.sleep(1.7)
                         # Click on the specific location (920, 20) for a different purpose
                         pyautogui.click(920, 20)
-                        time.sleep(0.4)
+                        time.sleep(0.2)
 
 
                     # Align to Center Button
                     print("Align to Center Button")
                     pyautogui.click(665, 940)
-                    time.sleep(0.5)
-
-                    # Select all images
-                    # pyautogui.moveTo(745, 190)
-                    # pyautogui.mouseDown()
-                    # pyautogui.dragTo(1160, 985, duration=0.5)
-
+                    time.sleep(0.2)
                     # Click on the specific location (920, 20) for a different purpose
                     pyautogui.click(920, 20)
-                    time.sleep(0.4)
+                    time.sleep(0.2)
 
-
-            # Click on the specific location (920, 20) for a different purpose
-            pyautogui.click(920, 20)
-            time.sleep(0.4)
             # Select all images
             pyautogui.moveTo(745, 190)
             pyautogui.mouseDown()
-            pyautogui.dragTo(1160, 985, duration=0.5)
-            time.sleep(0.1)
-            #vertical spaces 5mm
-            #pyautogui.click(456, 943)
-            #time.sleep(0.5)
-            #pyautogui.doubleClick(353, 818)
-            #time.sleep(0.5)
-            #pyautogui.write(str(4))
-            #time.sleep(0.5)
-            #pyautogui.doubleClick(353, 859)
-            #time.sleep(0.5)
-            #pyautogui.write(str(5))
-            #time.sleep(0.5)
-            #pyautogui.press('enter')
-            #time.sleep(2)
+            pyautogui.dragTo(1323, 985, duration=0.5)
+            time.sleep(0.4)
+
 
             # Additional operations after processing all rows
             # Click on the specific location (920, 20) for a different purpose
             pyautogui.click(920, 20)
             time.sleep(0.4)
-            time.sleep(0.3)
             pyautogui.click(140, 60)
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.click(791, 756)
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.doubleClick(831, 394)
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.write(str(0.6))
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.press('enter')
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.press('esc')
-            time.sleep(0.3)
+            time.sleep(0.4)
             
             # Select all images
             pyautogui.moveTo(745, 190)
             pyautogui.mouseDown()
-            pyautogui.dragTo(1160, 985, duration=0.5)
-            time.sleep(0.3)
-            # Click on the specific location (920, 20) for a different purpose
-            pyautogui.click(920, 20)
-            time.sleep(0.2)
-            # Align to Center Button
-            #print("Align to Center Button")
-            #pyautogui.click(665, 940)
-            #time.sleep(0.5)
-
-            # Select all images
-            pyautogui.moveTo(745, 190)
-            pyautogui.mouseDown()
-            pyautogui.dragTo(1160, 985, duration=0.5)
-            time.sleep(0.3)
+            pyautogui.dragTo(1323, 985, duration=0.5)
+            time.sleep(0.4)
             pyautogui.hotkey('ctrl', 'g')
             # Copy
             pyautogui.hotkey('ctrl', 'c')
@@ -242,30 +206,20 @@ def main():
             time.sleep(0.4)
             pyautogui.write(str(14))
             time.sleep(0.4)
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.doubleClick(931, 470)
             pyautogui.write(str(1))
-            time.sleep(0.3)
+            time.sleep(0.4)
             pyautogui.press('enter')
             time.sleep(1)
 
             # Click on the specific location (920, 20) for a different purpose
             pyautogui.click(920, 20)
-            time.sleep(0.2)
+            time.sleep(0.4)
             # Align to Center Button
             print("Align to Center Button")
             pyautogui.click(665, 940)
-            time.sleep(0.5)
-            # Select all images
-            pyautogui.moveTo(745, 190)
-            pyautogui.mouseDown()
-            pyautogui.dragTo(1160, 985, duration=0.5)
-            time.sleep(0.3)
-            # Align to Center Button
-            print("Align to Center Button")
-            pyautogui.click(665, 940)
-            time.sleep(0.5)
-            # Show a message box when the script finishes
+            time.sleep(0.4)
             messagebox.showinfo("Process Complete","Delete LINES GUIEDS or it will be printed! Process Complete")
 
 
