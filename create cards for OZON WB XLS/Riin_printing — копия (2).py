@@ -9,6 +9,11 @@ from tkinter import Tk, filedialog
 import shutil
 from datetime import datetime
 
+1
+C:\work\baby
+prints\MainTop\tif\tatyana\A4\logos\200
+_vert.tif
+
 from tkinter import messagebox
 
 
@@ -175,21 +180,12 @@ def main():
             #5mm
             pyautogui.click(451, 940)
             time.sleep(0.4)
-            pyautogui.doubleClick(349, 820)
-            time.sleep(0.4)
+            pyautogui.doubleClick(349, 822)
             pyautogui.write(str(4))
             time.sleep(0.4)
             pyautogui.doubleClick(354, 864)
-            time.sleep(0.4)
             pyautogui.write(str(5))
             time.sleep(0.4)
-            pyautogui.press('enter')
-            time.sleep(1)
-            pyautogui.click(523, 935)
-            time.sleep(0.4)
-            pyautogui.click(665, 938)
-            time.sleep(0.4)
-
 
             # Additional operations after processing all rows
             # Click on the specific location (920, 20) for a different purpose
