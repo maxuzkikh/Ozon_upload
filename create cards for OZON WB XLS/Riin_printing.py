@@ -113,22 +113,22 @@ def main():
                     # Copy the file path to the clipboard and type it out
                     print(f"Pasting the file path: {file_path}")
                     pyperclip.copy(file_path)  # Copy file path to clipboard
-                    time.sleep(0.2)
+                    time.sleep(0.3)
                     pyautogui.hotkey('ctrl', 'v')  # Paste the file path from clipboard
                     pyautogui.press('enter')  # Press Enter to open the file
-                    time.sleep(0.2)
+                    time.sleep(0.3)
                     pyautogui.press('enter')
-                    time.sleep(1.7)
+                    time.sleep(2.1)
                     # Click on the specific location (920, 20) for a different purpose
                     pyautogui.click(920, 20)
-                    time.sleep(0.2)
+                    time.sleep(0.3)
 
                     # Rotate if needed
                     if rotate == 1:
                         # Click 525, 975 pixels
                         pyautogui.click(525, 975)
                         print("Rotated")
-                        time.sleep(1.7)
+                        time.sleep(2.1)
 
                     c = int(copies / 2 - 1)
                     print(c)
@@ -153,7 +153,9 @@ def main():
                         pyautogui.write(str(c))
                         time.sleep(0.3)
                         pyautogui.press('enter')
-                        time.sleep(1.7)
+                        time.sleep(2.1)
+                        pyautogui.hotkey('ctrl', 'g')
+                        time.sleep(0.3)
                         # Click on the specific location (920, 20) for a different purpose
                         pyautogui.click(920, 20)
                         time.sleep(0.2)
@@ -161,10 +163,10 @@ def main():
                     # Align to Center Button
                     print("Align to Center Button")
                     pyautogui.click(665, 940)
-                    time.sleep(0.2)
+                    time.sleep(0.3)
                     # Click on the specific location (920, 20) for a different purpose
                     pyautogui.click(920, 20)
-                    time.sleep(0.2)
+                    time.sleep(0.3)
 
             # Select all images
             pyautogui.moveTo(745, 190)
