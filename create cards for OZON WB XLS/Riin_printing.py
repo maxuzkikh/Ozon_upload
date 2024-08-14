@@ -174,7 +174,6 @@ def main():
             pyautogui.dragTo(1323, 985, duration=0.5)
             time.sleep(0.4)
 
-            time.sleep(20)
             #5mm
             pyautogui.click(451, 940)
             time.sleep(0.4)
