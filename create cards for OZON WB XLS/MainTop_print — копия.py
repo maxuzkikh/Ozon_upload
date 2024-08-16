@@ -333,7 +333,7 @@ if os.path.exists(file_path):
             sys.exit(0)
             time.sleep(1)
         # Now calculate the offset
-        offset = -12580 - num_copies * 140
+        offset = -13580 - num_copies * 140
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
         offset += 40  # Increment offset for the next iteration
         offset_mouse=4.0*(num_copies+0)
