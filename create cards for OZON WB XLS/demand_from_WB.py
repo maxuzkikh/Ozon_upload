@@ -21,7 +21,7 @@ def calculate_send(row):
 
 # Function to fill 'дней' column
 def fill_days(row):
-    return 30
+    return 37
 
 
 # Function to fill 'сумма' column
