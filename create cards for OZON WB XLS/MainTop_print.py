@@ -336,7 +336,7 @@ if os.path.exists(file_path):
         offset = -12580 - num_copies * 140
         process_image(print_path, rotate, layout_width)  # Pass layout_width as an argument
         offset += 40  # Increment offset for the next iteration
-        offset_mouse=4.0*(num_copies+0)
+        offset_mouse=3.8*(num_copies+0)
         print("offset_mouse",offset_mouse)
         start += 1
 
