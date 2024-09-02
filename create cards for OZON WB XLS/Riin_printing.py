@@ -169,10 +169,12 @@ def main():
                     time.sleep(0.3)
 
             # Select all images
-            pyautogui.moveTo(745, 190)
-            pyautogui.mouseDown()
-            pyautogui.dragTo(1323, 985, duration=0.5)
+            pyautogui.hotkey('ctrl', 'a')
             time.sleep(0.4)
+            # pyautogui.moveTo(745, 190)
+            # pyautogui.mouseDown()
+            # pyautogui.dragTo(1323, 985, duration=0.5)
+            # time.sleep(0.4)
 
             #5mm
             pyautogui.click(451, 940)
@@ -211,10 +213,12 @@ def main():
             time.sleep(0.4)
 
             # Select all images
-            pyautogui.moveTo(745, 190)
-            pyautogui.mouseDown()
-            pyautogui.dragTo(1323, 985, duration=0.5)
+            pyautogui.hotkey('ctrl', 'a')
             time.sleep(0.4)
+            #pyautogui.moveTo(745, 190)
+            #pyautogui.mouseDown()
+            #pyautogui.dragTo(1323, 985, duration=0.5)
+            #time.sleep(0.4)
             pyautogui.hotkey('ctrl', 'g')
             # Copy
             pyautogui.hotkey('ctrl', 'c')
