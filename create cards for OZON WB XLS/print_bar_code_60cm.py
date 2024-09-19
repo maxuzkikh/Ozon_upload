@@ -102,7 +102,7 @@ def print_pdfs_from_excel_with_path_lookup(excel_file_path, barcode_excel_path, 
                     print_pdf_to_printer(pdf_path, acrobat_path, printer_name)
 
                     # Wait for the print job to complete (adjust time if needed)
-                    time.sleep(3)  # Adjust the duration as needed
+                    time.sleep(4)  # Adjust the duration as needed
 
                     # Additional processing if needed
                     # ...
