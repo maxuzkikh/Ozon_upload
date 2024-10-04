@@ -10,9 +10,10 @@ def calculate_send(row):
         orders = float(row['Среднее количество заказов в день, шт'])
         days = float(row['дней'])
         stock = float(row['Остатки склад ВБ, шт'])
+        stock_MY = float(row['Остатки МП, шт'])
 
         # Perform the calculation
-        result = orders * days - stock
+        result = orders * days - stock - stock_MY
         return max(result, 0)  # If result is negative, return 0
     except ValueError:
         # Handle non-numeric values
@@ -42,7 +43,7 @@ try:
     df = pd.read_excel(filename, sheet_name='Товары', header=1)  # Assuming headers start from the second row
 
     # Select required columns
-    df = df[['Артикул продавца', 'Среднее количество заказов в день, шт', 'Остатки склад ВБ, шт']]
+    df = df[['Артикул продавца', 'Среднее количество заказов в день, шт', 'Остатки склад ВБ, шт', 'Остатки МП, шт']]
 
     # Calculate 'отправить' column
     df['дней'] = df.apply(fill_days, axis=1)  # Fill 'дней' column first
