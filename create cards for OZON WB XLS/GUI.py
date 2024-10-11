@@ -36,10 +36,14 @@ def run_script11():
 def run_script12():
     subprocess.Popen(["python", "Riin_printing.py"])
 
+def run_script14():
+    subprocess.Popen(["python", "update_stock.py"])
+
 def run_script13():
     subprocess.Popen(["python", "print_bar_code_60cm.py"])
 root = tk.Tk()
 root.title("Python Script Runner")
+
 
 # Set window size to 500x500
 root.geometry("500x500")
@@ -82,6 +86,9 @@ button12.pack()
 
 button13 = tk.Button(root, text="print_bar_code_60cm", command=run_script13)
 button13.pack()
+
+button14 = tk.Button(root, text="update_stock", command=run_script14)
+button14.pack()
 
 
 root.mainloop()
