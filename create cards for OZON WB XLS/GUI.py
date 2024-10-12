@@ -41,6 +41,10 @@ def run_script14():
 
 def run_script13():
     subprocess.Popen(["python", "print_bar_code_60cm.py"])
+
+def run_script15():
+    subprocess.Popen(["python", "run_photoshop_create_cards.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -89,6 +93,10 @@ button13.pack()
 
 button14 = tk.Button(root, text="update_stock", command=run_script14)
 button14.pack()
+
+button14 = tk.Button(root, text="1) run_photoshop_create_cards", command=run_script15)
+button14.pack()
+
 
 
 root.mainloop()
