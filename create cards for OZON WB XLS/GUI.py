@@ -4,7 +4,7 @@ import subprocess
 import os
 import win32com.client
 
-def run_script1():
+def run_script20():
     subprocess.Popen(["python", "generate_import_Ozon.py"])
 
 def run_script2():
@@ -111,8 +111,7 @@ button6.pack()
 button11 = tk.Button(root, text="photoshop_barcode_tati.py", command=run_script11)
 button11.pack()
 
-button1 = tk.Button(root, text="output_data_for_Ozon", command=run_script1)
-button1.pack()
+
 
 button2 = tk.Button(root, text="output_data_for_WB", command=run_script2)
 button2.pack()
@@ -161,6 +160,9 @@ button18.pack()
 
 button19 = tk.Button(root, text="5) Fill Data to generate files for Ozon|WB", command=run_script19)
 button19.pack()
+
+button20 = tk.Button(root, text="6) output_data_for_Ozon", command=run_script20)
+button20.pack()
 
 
 
