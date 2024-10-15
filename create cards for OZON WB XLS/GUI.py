@@ -103,7 +103,7 @@ root.title("Python Script Runner")
 
 
 # Set window size to 500x500
-root.geometry("500x500")
+root.geometry("300x700")
 
 button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
 button6.pack()
@@ -113,8 +113,7 @@ button11.pack()
 
 
 
-button2 = tk.Button(root, text="output_data_for_WB", command=run_script2)
-button2.pack()
+
 
 button3 = tk.Button(root, text="WB get_demand file to Maintop", command=run_script3)
 button3.pack()
@@ -163,6 +162,12 @@ button19.pack()
 
 button20 = tk.Button(root, text="6) output_data_for_Ozon", command=run_script20)
 button20.pack()
+
+button21 = tk.Button(root, text="7) Fill Barcode GENERSTED FROM OZON", command=run_script16)
+button21.pack()
+
+button22 = tk.Button(root, text="8) output_data_for_WB", command=run_script2)
+button22.pack()
 
 
 
