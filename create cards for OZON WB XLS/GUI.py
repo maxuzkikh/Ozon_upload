@@ -45,6 +45,12 @@ def run_script13():
 def run_script15():
     subprocess.Popen(["python", "run_photoshop_create_cards.py"])
 
+def run_script16():
+    subprocess.Popen(["python", "fill_barcode_DB.py"])
+
+def run_script17():
+    subprocess.Popen(["python", "upload_DTF.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -94,8 +100,15 @@ button13.pack()
 button14 = tk.Button(root, text="update_stock", command=run_script14)
 button14.pack()
 
-button14 = tk.Button(root, text="1) run_photoshop_create_cards", command=run_script15)
-button14.pack()
+button17 = tk.Button(root, text="1) open folder Upload final DTF Images", command=run_script17)
+button17.pack()
+
+button16 = tk.Button(root, text="2) Fill Data Base Barcode", command=run_script16)
+button16.pack()
+
+button15 = tk.Button(root, text="3) run_photoshop_create_cards", command=run_script15)
+button15.pack()
+
 
 
 

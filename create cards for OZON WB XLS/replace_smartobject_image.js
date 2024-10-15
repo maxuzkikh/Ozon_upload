@@ -3,10 +3,20 @@
 if (app.documents.length > 0) {
     var myDocument = app.activeDocument;
     var theName = myDocument.name.match(/(.*)\.[^\.]+$/)[1];
-    var thePath = myDocument.path;
     var theLayer = myDocument.activeLayer;
     var selectedFiles = []; // Variable to store selected files for group "1"
-    var jpgSaveFolder; // Variable to store the selected folder to save JPG files
+
+    // Prompt user to select the destination folder for saving images
+    var jpgSaveFolder = Folder.selectDialog("Select the folder to save JPG files");
+
+    // Check if a folder was selected
+    if (!jpgSaveFolder) {
+        alert("No folder selected. Exiting script.");
+        exit(); // Exit script if no folder was selected
+    }
+
+    // Debugging: Alert the selected path
+    alert("Saving images to: " + jpgSaveFolder.fsName);
 
     // Function to find the group named "1", "2", "3", etc. within the selected group
     function findGroupNamed(layers, groupName) {
@@ -30,19 +40,10 @@ if (app.documents.length > 0) {
         return null; // No Smart Object found in the group
     }
 
-
-    
     // Check if layer is a group
     if (theLayer.typename != "LayerSet") {
         alert("Selected layer is not a group.");
     } else {
-        // Prompt user to select destination folder
-        jpgSaveFolder = Folder.selectDialog("Select folder to save JPG files");
-        if (!jpgSaveFolder) {
-            alert("No folder selected. Exiting script.");
-            exit(); // Exit script
-        }
-
         // Initialize smartObjectInGroup to reference the first Smart Object layer in the group
         var smartObjectInGroup = findSmartObject(theLayer);
 
@@ -54,10 +55,9 @@ if (app.documents.length > 0) {
         if (selectedFiles.length === 0) {
             selectedFiles = selectFiles("Please select files for Smart Object ");
         }
-         for (var m = 0; m < selectedFiles.length; m++) {
-            //theLayer.typename = "LayerSet";
+
+        for (var m = 0; m < selectedFiles.length; m++) {
             var theNewName = selectedFiles[m].name.match(/(.*)\.[^\.]+$/)[1];
-            //alert("selectedFiles[m].name: " + selectedFiles[m].name);
 
             for (var groupIndex = 0; groupIndex <= theLayer.layers.length; groupIndex++) {
                 var currentGroup = findGroupNamed(theLayer.layers, groupIndex.toString());
@@ -86,11 +86,11 @@ if (app.documents.length > 0) {
                     // Save JPG
                     var jpgSaveFile = new File(jpgSaveFolder + "/" + theNewName + jpgSuffix);
                     myDocument.saveAs(jpgSaveFile, jpgSaveOptions, true, Extension.LOWERCASE);
-                    currentGroup.visible = false;
+                    currentGroup.visible = false; // Hide the group after processing
                 }
             }
 
-            // If the next group is not found, switch to the "А4" group
+            // If the next group is not found, switch to the "export" group
             if (!currentGroup) {
                 // Check if there is an active document open
                 if (app.documents.length > 0) {
@@ -98,39 +98,32 @@ if (app.documents.length > 0) {
 
                     // Find the layer by name
                     var exportLayer = myDocument.layers.getByName("export");
-                    //alert("Group 'export' Selected.");
 
                     // Check if the layer exists
                     if (exportLayer) {
                         // Set the found layer as active
                         app.activeDocument.activeLayer = exportLayer;
-                    } else {
-                        // Alert if the layer doesn't exist
-                        //alert("Layer 'export' not found.");
                     }
-                } else {
-                    // Alert if no document is open
-                    //alert("No document open in Photoshop.");
                 }
             }
-         }
+        }
     }
 }
 
 // Function to select files
 function selectFiles(dialogTitle) {
     if ($.os.search(/windows/i) != -1) {
-        return File.openDialog(dialogTitle, "*.png;*.psd;*.tif;*.jpg", true)
+        return File.openDialog(dialogTitle, "*.png;*.psd;*.tif;*.jpg", true);
     } else {
-        return File.openDialog(dialogTitle, getFiles, true)
+        return File.openDialog(dialogTitle, getFiles, true);
     };
 }
 
 // Get PSDs, TIFs and JPGs from files
 function getFiles(theFile) {
     if (theFile.name.match(/\.(psd|tif|jpg)$/i) != null || theFile.constructor.name == "Folder") {
-        return true
-    };
+        return true;
+    }
 };
 
 // Replace SmartObject Contents
@@ -141,7 +134,6 @@ function replaceContents(newFile, theSO) {
     }
 
     app.activeDocument.activeLayer = theSO;
-    // =======================================================
     var idplacedLayerReplaceContents = stringIDToTypeID("placedLayerReplaceContents");
     var desc3 = new ActionDescriptor();
     var idnull = charIDToTypeID("null");
@@ -149,5 +141,5 @@ function replaceContents(newFile, theSO) {
     var idPgNm = charIDToTypeID("PgNm");
     desc3.putInteger(idPgNm, 1);
     executeAction(idplacedLayerReplaceContents, desc3, DialogModes.NO);
-    return app.activeDocument.activeLayer
+    return app.activeDocument.activeLayer;
 };
