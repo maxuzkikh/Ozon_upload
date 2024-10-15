@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 import subprocess
+import os
+import win32com.client
 
 def run_script1():
     subprocess.Popen(["python", "generate_import_Ozon.py"])
@@ -49,7 +51,52 @@ def run_script16():
     subprocess.Popen(["python", "fill_barcode_DB.py"])
 
 def run_script17():
-    subprocess.Popen(["python", "upload_DTF.py"])
+    # Get the current user's home directory
+    user_home = os.path.expanduser("~")
+
+    # Specify the path to the xlsx file using the user's home directory
+    xlsx_file_path = os.path.join(user_home, "Documents", "GitHub", "Ozon_upload", "DTF_images")
+
+    # Open the Excel file with the default program
+    try:
+        os.startfile(xlsx_file_path)
+        print(f"Opened: {xlsx_file_path}")
+    except FileNotFoundError:
+        print(f"The specified Excel file was not found: {xlsx_file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def run_script18():
+    # Get the current user's home directory
+    user_home = os.path.expanduser("~")
+
+    # Specify the path to the xlsx file using the user's home directory
+    xlsx_file_path = os.path.join(user_home, "Documents", "GitHub", "Ozon_upload","Tatulya","photoshop cards")
+
+    # Open the Excel file with the default program
+    try:
+        os.startfile(xlsx_file_path)
+        print(f"Opened: {xlsx_file_path}")
+    except FileNotFoundError:
+        print(f"The specified Excel file was not found: {xlsx_file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def run_script19():
+    # Get the current user's home directory
+    user_home = os.path.expanduser("~")
+
+    # Specify the path to the xlsx file using the user's home directory
+    xlsx_file_path = os.path.join(user_home, "Documents", "GitHub", "Ozon_upload","create cards for OZON WB XLS","data to create Термонаклейки","Fill_data.xlsx")
+
+    # Open the Excel file with the default program
+    try:
+        os.startfile(xlsx_file_path)
+        print(f"Opened: {xlsx_file_path}")
+    except FileNotFoundError:
+        print(f"The specified Excel file was not found: {xlsx_file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 root = tk.Tk()
 root.title("Python Script Runner")
@@ -108,6 +155,12 @@ button16.pack()
 
 button15 = tk.Button(root, text="3) run_photoshop_create_cards", command=run_script15)
 button15.pack()
+
+button18 = tk.Button(root, text="4) Export color Image for Ozon", command=run_script18)
+button18.pack()
+
+button19 = tk.Button(root, text="5) Fill Data to generate files for Ozon|WB", command=run_script19)
+button19.pack()
 
 
 
