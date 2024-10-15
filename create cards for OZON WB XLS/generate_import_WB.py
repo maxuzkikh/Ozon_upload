@@ -55,6 +55,8 @@ column_mapping = {
     'Баркоды': 'Баркоды',
     'Высота упаковки': 'Высота упаковки',
     'Длина упаковки': 'Длина упаковки',
+    'Вес товара с упаковкой (г)': 'Вес товара с упаковкой (г)',  # Ensure correct mapping for multi-word columns
+    'Цена': 'Цена',
 }
 
 # Function to find column index in the output sheet
@@ -74,17 +76,25 @@ for i, row in enumerate(first_df.itertuples(index=False), start=5):  # Start fil
             value_to_fill = getattr(row, first_col, None)  # Get the value using getattr
             
             # Debugging output for missing values
-            if value_to_fill is None:
+            if pd.isna(value_to_fill):  # Check for NaN values
                 print(f"No data to fill for '{first_col}'. Found value: {value_to_fill} (Row: {row})")
             else:
-                ws_output.cell(row=i, column=find_column(ws_output, second_col), value=value_to_fill)
-                print(f"Filled value for '{second_col}' from '{first_col}': {value_to_fill}.")
+                try:
+                    ws_output.cell(row=i, column=find_column(ws_output, second_col), value=value_to_fill)
+                    print(f"Filled value for '{second_col}' from '{first_col}': {value_to_fill}.")
+                except ValueError as e:
+                    print(e)
         else:
-            print(f"Column '{first_col}' not found in the first file.")
+            print(f"Column '{first_col}' not found in the first file. Available columns: {first_df.columns.tolist()}")
+
+# After filling the template, check for the specific problematic column
+print("Checking 'Артикул продавца' values:")
+for j, row in enumerate(first_df['Артикул продавца']):
+    print(f"Row {j}: {row}")
 
 # Save the updated workbook to the new file
 try:
-    wb_output.save(first_file_path)
-    print(f"New file created: {first_file_path}")
+    wb_output.save(new_template_file_path)
+    print(f"New file created: {new_template_file_path}")
 except Exception as e:
     print(f"Error saving the new file: {e}")
