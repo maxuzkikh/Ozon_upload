@@ -108,11 +108,6 @@ root.geometry("300x700")
 button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
 button6.pack()
 
-button11 = tk.Button(root, text="photoshop_barcode_tati.py", command=run_script11)
-button11.pack()
-
-
-
 
 
 button3 = tk.Button(root, text="WB get_demand file to Maintop", command=run_script3)
@@ -127,8 +122,6 @@ button5.pack()
 button7 = tk.Button(root, text="find_barcode_for_WB", command=run_script7)
 button7.pack()
 
-button8 = tk.Button(root, text="find_barcode_from_file", command=run_script8)
-button8.pack()
 
 button9 = tk.Button(root, text="sort_by_type", command=run_script9)
 button9.pack()
@@ -148,7 +141,7 @@ button14.pack()
 button17 = tk.Button(root, text="1) open folder Upload final DTF Images", command=run_script17)
 button17.pack()
 
-button16 = tk.Button(root, text="2) Fill Data Base Barcode", command=run_script16)
+button16 = tk.Button(root, text="2) Fill Data Base Description of New Cards", command=run_script16)
 button16.pack()
 
 button15 = tk.Button(root, text="3) run_photoshop_create_cards", command=run_script15)
@@ -163,11 +156,18 @@ button19.pack()
 button20 = tk.Button(root, text="6) output_data_for_Ozon", command=run_script20)
 button20.pack()
 
-button21 = tk.Button(root, text="7) Fill Barcode GENERSTED FROM OZON", command=run_script16)
+button8 = tk.Button(root, text="7) find_barcode_from_file", command=run_script8)
+button8.pack()
+
+button21 = tk.Button(root, text="8) Fill Barcode generated FROM OZON", command=run_script16)
 button21.pack()
 
-button22 = tk.Button(root, text="8) output_data_for_WB", command=run_script2)
+button22 = tk.Button(root, text="9) output_data_for_WB", command=run_script2)
 button22.pack()
+
+button11 = tk.Button(root, text="10) photoshop_barcode_tati.py", command=run_script11)
+button11.pack()
+
 
 
 
