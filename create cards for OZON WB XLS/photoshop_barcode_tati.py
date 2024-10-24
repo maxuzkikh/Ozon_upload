@@ -115,7 +115,7 @@ for filename in os.listdir(folder_path):
 
         # Confirm the selection
         pyautogui.press('enter')
-        time.sleep(0.5)
+        time.sleep(1)
         pyautogui.press('enter')
         time.sleep(0.5)
         pyautogui.press('enter')
