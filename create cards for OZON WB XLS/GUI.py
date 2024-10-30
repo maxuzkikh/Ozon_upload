@@ -13,6 +13,9 @@ def run_script2():
 def run_script3():
         subprocess.Popen(["python", "wb_get_demand.py"])
 
+def run_script23():
+    subprocess.Popen(["python", "demand_from_WB_without_my_stock.py"])
+
 def run_script4():
     subprocess.Popen(["python", "MainTop_print.py"])
 
@@ -128,6 +131,9 @@ button9.pack()
 
 button10 = tk.Button(root, text="demand_from_WB", command=run_script10)
 button10.pack()
+
+button23 = tk.Button(root, text="demand_from_WB_without_my_stock", command=run_script23)
+button23.pack()
 
 button12 = tk.Button(root, text="Riin_printing", command=run_script12)
 button12.pack()
