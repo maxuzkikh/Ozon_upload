@@ -101,6 +101,10 @@ def run_script19():
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
+def run_script24():
+    subprocess.Popen(["python", "find_in_stock.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -173,6 +177,9 @@ button22.pack()
 
 button11 = tk.Button(root, text="10) photoshop_barcode_tati.py", command=run_script11)
 button11.pack()
+
+button24 = tk.Button(root, text="10) find_in_stock.py", command=run_script24)
+button24.pack()
 
 
 
