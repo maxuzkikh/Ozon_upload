@@ -1,84 +1,111 @@
-import pandas as pd
-from tkinter import Tk, filedialog
 import shutil
-import openpyxl
+import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import Font, Border, Side
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 import os
-import datetime
 
-# 1. Открываем диалоговое окно для выбора исходного Excel файла
-root = Tk()
-root.withdraw()  # Скрыть главное окно
-input_excel_path = filedialog.askopenfilename(
-    title="Select the Excel File with 'Артикул продавца'",
-    filetypes=(("Excel files", "*.xlsx"), ("All files", "*.*"))
-)
+def select_excel_file():
+    Tk().withdraw()  # Hide the root window
+    filename = askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+    return filename
 
-if not input_excel_path:
-    raise FileNotFoundError("No Excel file selected. Please select a valid Excel file.")
+def copy_and_modify_excel(file_path):
+    # Copy the original Excel file to the same folder
+    folder_path = os.path.dirname(file_path)
+    file_name = os.path.basename(file_path)
+    new_file_path = os.path.join(folder_path, f"copy_{file_name}")
+    shutil.copy(file_path, new_file_path)
 
-# 2. Путь ко второму Excel файлу, который содержит 'Артикул' и 'место'
-barcode_excel_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
+    # Open the copied file to make modifications
+    wb = load_workbook(new_file_path)
+    ws = wb.active
 
-# 3. Создаем копию исходного файла
-# Добавляем текущую метку времени для уникальности имени
-copy_excel_path = f"copied_{os.path.basename(input_excel_path)}"
+    # Add 'место' to cell I3
+    ws['I3'] = 'место'
 
-# Копируем файл, чтобы работать с его копией
-shutil.copy(input_excel_path, copy_excel_path)
+    # Adjust the width of column I to 40
+    ws.column_dimensions['I'].width = 10  # Set column I width to 40 units
 
-# 4. Читаем второй Excel файл (Data path barcode.xlsx)
-df_barcode = pd.read_excel(barcode_excel_path)
+    # Adjust the width of column G to 30
+    ws.column_dimensions['G'].width = 20  # Set column G width to 30 units
+    ws.column_dimensions['A'].width = 5
+    ws.column_dimensions['B'].width = 8
 
-# Проверяем структуру файлов
-print("Columns in the selected Excel file:")
-print(pd.read_excel(copy_excel_path).columns)
+    # Make columns G and I bold
+    bold_font = Font(bold=True)
+    ws['G3'].font = bold_font  # Make G3 bold
+    ws['I3'].font = bold_font  # Make I3 bold
 
-print("Columns in the barcode Excel file:")
-print(df_barcode.columns)
+    # Save the workbook with the modifications
+    wb.save(new_file_path)
+    return new_file_path
 
-# Убедимся, что нужные столбцы есть в обоих файлах
-if "Артикул продавца" not in pd.read_excel(copy_excel_path).columns:
-    raise ValueError("The selected Excel file is missing the 'Артикул продавца' column.")
-if "Артикул" not in df_barcode.columns or "место" not in df_barcode.columns:
-    raise ValueError("The barcode Excel file must contain the columns: 'Артикул' and 'место'.")
-
-# 5. Используем openpyxl для открытия копии файла
-wb = openpyxl.load_workbook(copy_excel_path)
-ws = wb.active  # Используем активный лист
-
-# 6. Добавляем новый столбец 'место' в DataFrame для работы с данными
-df_selected = pd.read_excel(copy_excel_path, header=None, skiprows=3)
-df_selected.columns = ["Лист подбора", "Артикул продавца", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8"]
-
-df_selected["место"] = None  # Создаем новый столбец 'место'
-
-# 7. Обрабатываем строки в столбце 'Артикул продавца'
-for index, row in df_selected.iterrows():
-    artikul_prodavtsa_value = row['Артикул продавца']
+def find_and_fill_values(file_path, barcode_file_path):
+    # Define bold font here
+    bold_font = Font(bold=True)
     
-    # Пропускаем строки с NaN или некорректным значением (например, 'Фото')
-    if pd.isna(artikul_prodavtsa_value) or artikul_prodavtsa_value == "Фото":
-        continue
-    
-    # 8. Ищем совпадение по 'Артикул' в DataFrame второго файла
-    matching_row = df_barcode[df_barcode["Артикул"] == artikul_prodavtsa_value]
-    
-    if not matching_row.empty:
-        # 9. Извлекаем значение из столбца 'место'
-        mesto_value = matching_row.iloc[0]["место"]
-        
-        # 10. Добавляем значение в новый столбец 'место' в DataFrame
-        df_selected.at[index, 'место'] = mesto_value
-    else:
-        print(f"No matching Артикул found for: {artikul_prodavtsa_value}")
+    # Define border style
+    thin_border = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
 
-# 11. Записываем обновленные данные обратно в лист Excel с помощью openpyxl
-for index, row in df_selected.iterrows():
-    # Обновляем значение в соответствующей ячейке столбца 'место' (столбец 8)
-    ws.cell(row=index + 4, column=9, value=row['место'])  # +4 так как начнём с G4
+    # Open the copied Excel file
+    wb = load_workbook(file_path)
+    ws = wb.active
 
-# 12. Сохраняем измененный Excel файл
-output_excel_path = f"modified_{os.path.basename(copy_excel_path)}"
-wb.save(output_excel_path)
+    # Load the barcode Excel file into a DataFrame
+    df = pd.read_excel(barcode_file_path)
 
-print(f"Modified Excel file saved as {output_excel_path}")
+    # Loop through the cells in column G starting from G4
+    row = 4
+    while True:
+        article_value = ws[f'G{row}'].value
+        if not article_value:  # Stop if we encounter an empty cell
+            break
+
+        # Find the matching row where Артикул продавца matches Артикул in the DataFrame
+        match_row = df[df['Артикул'] == article_value]
+
+        if not match_row.empty:
+            # Get the 'место' value from the DataFrame (adjust column name as needed)
+            место_value = match_row.iloc[0]['место']
+
+            # Write the 'место' value in the corresponding cell in column I
+            ws[f'I{row}'] = место_value
+        else:
+            # If no match is found, leave I{row} empty or set a default value
+            ws[f'I{row}'] = 'Not Found'
+
+        # Adjust the height of the row (e.g., set to 40 units)
+        ws.row_dimensions[row].height = 45
+
+        # Make the cells in columns G and I bold for each row
+        ws[f'G{row}'].font = bold_font  # Make G bold for each row
+        ws[f'I{row}'].font = bold_font  # Make I bold for each row
+
+        # Add borders to the "место" cell in column I
+        ws[f'I{row}'].border = thin_border
+
+        row += 1
+
+    # Save the changes to the file
+    wb.save(file_path)
+    print(f"Values for 'место' filled successfully in {file_path}")
+
+if __name__ == "__main__":
+    # Step 1: Select the Excel file
+    excel_file = select_excel_file()
+
+    # Step 2: Copy the file and add 'место' to cell I3
+    copied_excel_file = copy_and_modify_excel(excel_file)
+
+    # Step 3: Define the path to the barcode Excel file
+    barcode_file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
+
+    # Step 4: Find the matching value in the barcode file and fill the result
+    find_and_fill_values(copied_excel_file, barcode_file_path)
