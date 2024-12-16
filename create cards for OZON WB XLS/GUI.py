@@ -105,6 +105,9 @@ def run_script19():
 def run_script24():
     subprocess.Popen(["python", "find_in_stock.py"])
 
+def run_script25():
+    subprocess.Popen(["python", "add_placement.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -180,6 +183,9 @@ button11.pack()
 
 button24 = tk.Button(root, text="10) find_in_stock.py", command=run_script24)
 button24.pack()
+
+button25 = tk.Button(root, text="10) add_placement.py", command=run_script25)
+button25.pack()
 
 
 
