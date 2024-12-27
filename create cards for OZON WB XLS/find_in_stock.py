@@ -22,8 +22,8 @@ def copy_and_modify_excel(file_path):
     wb = load_workbook(new_file_path)
     ws = wb.active
 
-    # Add 'место' to cell I3
-    ws['I3'] = 'место'
+    # Add 'место' to cell I5
+    ws['I5'] = 'место'
 
     # Adjust the width of column I to 40
     ws.column_dimensions['I'].width = 10  # Set column I width to 40 units
@@ -35,8 +35,8 @@ def copy_and_modify_excel(file_path):
 
     # Make columns G and I bold
     bold_font = Font(bold=True)
-    ws['G3'].font = bold_font  # Make G3 bold
-    ws['I3'].font = bold_font  # Make I3 bold
+    ws['G5'].font = bold_font  # Make G5 bold
+    ws['I5'].font = bold_font  # Make I5 bold
 
     # Save the workbook with the modifications
     wb.save(new_file_path)
@@ -61,8 +61,8 @@ def find_and_fill_values(file_path, barcode_file_path):
     # Load the barcode Excel file into a DataFrame
     df = pd.read_excel(barcode_file_path)
 
-    # Loop through the cells in column G starting from G4
-    row = 4
+    # Loop through the cells in column G starting from G6
+    row = 6
     while True:
         article_value = ws[f'G{row}'].value
         if not article_value:  # Stop if we encounter an empty cell
@@ -93,15 +93,31 @@ def find_and_fill_values(file_path, barcode_file_path):
 
         row += 1
 
+    # Remove the first 8 characters in column H starting from row 6
+    row = 6
+    while True:
+        cell_value = ws[f'H{row}'].value
+        if not cell_value:  # Stop if we encounter an empty cell
+            break
+
+        # Update the cell value by removing the first 8 characters
+        ws[f'H{row}'].value = cell_value[8:]
+        row += 1
+
+    # Delete columns C, D, and F
+    ws.delete_cols(3)  # Delete column C
+    ws.delete_cols(3)  # Delete column D (after previous deletion)
+    ws.delete_cols(4)  # Delete column F (after two previous deletions)
+
     # Save the changes to the file
     wb.save(file_path)
-    print(f"Values for 'место' filled successfully in {file_path}")
+    print(f"Values for 'место' filled successfully, text modified, and columns deleted in {file_path}")
 
 if __name__ == "__main__":
     # Step 1: Select the Excel file
     excel_file = select_excel_file()
 
-    # Step 2: Copy the file and add 'место' to cell I3
+    # Step 2: Copy the file and add 'место' to cell I5
     copied_excel_file = copy_and_modify_excel(excel_file)
 
     # Step 3: Define the path to the barcode Excel file
