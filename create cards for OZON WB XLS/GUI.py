@@ -108,6 +108,9 @@ def run_script24():
 def run_script25():
     subprocess.Popen(["python", "add_placement.py"])
 
+def run_script26():
+    subprocess.Popen(["python", "print_max_a5.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -186,6 +189,10 @@ button24.pack()
 
 button25 = tk.Button(root, text="10) add_placement.py", command=run_script25)
 button25.pack()
+
+button26 = tk.Button(root, text="print_max_a5.py", command=run_script26)
+button26.pack()
+
 
 
 

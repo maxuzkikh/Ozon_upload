@@ -1,6 +1,19 @@
 import win32com.client
 import pandas as pd
 from pathlib import Path
+import ctypes
+import time
+
+def bring_window_to_front(window_title):
+    """Bring a window to the front using its title."""
+    hwnd = ctypes.windll.user32.FindWindowW(None, window_title)
+    if hwnd == 0:
+        print(f"Window with title '{window_title}' not found.")
+        return False
+
+    ctypes.windll.user32.SetForegroundWindow(hwnd)
+    time.sleep(0.3)  # Allow some time for the window to activate
+    return True
 
 # Define file paths
 excel_file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
@@ -20,9 +33,19 @@ if pdf_path_column not in data.columns or place_column not in data.columns:
 ps_app = win32com.client.Dispatch("Photoshop.Application")
 ps_app.Visible = True
 
+# Bring Photoshop window to the front
+window_title = "Adobe Photoshop 2022"
+if bring_window_to_front(window_title):
+    print("Photoshop window found and brought to the front.")
+else:
+    print("Failed to bring the Photoshop window to the front.")
+
+# Wait a moment to ensure the window is in focus
+time.sleep(0.3)
+
 # Process only the first row of the data
 for index, row in data.iterrows():
-    if index >= 1:
+    if index >= 1:  # Process only the first row
         break
 
     pdf_path = row[pdf_path_column]
@@ -47,17 +70,14 @@ for index, row in data.iterrows():
         text_layer.TextItem.Contents = text_content
 
         # Position the text layer in the bottom right corner
-        text_layer.TextItem.Position = [0.1, 3.7]  # Adjust offsets as needed
+        text_layer.TextItem.Position = [0.6, 3.7]  # Adjust offsets as needed
 
-        # Save the updated PDF
-        save_options = win32com.client.Dispatch("Photoshop.PDFSaveOptions")
-        output_path = Path(pdf_path).with_name(f"{Path(pdf_path).stem}_updated.pdf")
-        ps_doc.SaveAs(str(output_path), save_options)
+        # Save the updated file in place
+        ps_doc.Save()  # Save changes to the original file
 
         # Close the document
-        ps_doc.Close()
-
-        print(f"Updated PDF saved to: {output_path}")
+        ps_doc.Close(1)  # 1 = Save changes and close
+        print(f"Updated and saved file: {pdf_path}")
 
     except Exception as e:
         print(f"Error processing file {pdf_path}: {e}")
