@@ -111,6 +111,12 @@ def run_script25():
 def run_script26():
     subprocess.Popen(["python", "print_max_a5.py"])
 
+def run_script27():
+    subprocess.Popen(["python", "telebot.py"])
+
+def run_script28():
+    subprocess.Popen(["python", "get_chat_id.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -192,6 +198,12 @@ button25.pack()
 
 button26 = tk.Button(root, text="print_max_a5.py", command=run_script26)
 button26.pack()
+
+button27 = tk.Button(root, text="telebot.py", command=run_script27)
+button27.pack()
+
+button28 = tk.Button(root, text="get_chat_id.py", command=run_script28)
+button28.pack()
 
 
 
