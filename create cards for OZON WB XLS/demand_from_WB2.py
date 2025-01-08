@@ -13,7 +13,7 @@ def calculate_send(row):
         stock_MY = float(row['Остатки МП, шт'])
 
         # Perform the calculation
-        result = orders * days - stock - stock_MY
+        result = orders * days - stock
         return max(result, 0)  # If result is negative, return 0
     except ValueError:
         # Handle non-numeric values
@@ -22,7 +22,7 @@ def calculate_send(row):
 
 # Function to fill 'дней' column
 def fill_days(row):
-    return 14
+    return 20
 
 
 # Function to fill 'сумма' column

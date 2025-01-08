@@ -117,6 +117,9 @@ def run_script27():
 def run_script28():
     subprocess.Popen(["python", "get_chat_id.py"])
 
+def run_script29():
+    subprocess.Popen(["python", "demand_from_WB2.py"])
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -145,10 +148,13 @@ button7.pack()
 button9 = tk.Button(root, text="sort_by_type", command=run_script9)
 button9.pack()
 
-button10 = tk.Button(root, text="demand_from_WB", command=run_script10)
+button29 = tk.Button(root, text="demand_from_WB учитывая только склад на ВБ", command=run_script29)
+button29.pack()
+
+button10 = tk.Button(root, text="demand_from_WB учитывая все склады", command=run_script10)
 button10.pack()
 
-button23 = tk.Button(root, text="demand_from_WB_without_my_stock", command=run_script23)
+button23 = tk.Button(root, text="demand_from_WB_without_my_stock не учитывая в наличии ничего", command=run_script23)
 button23.pack()
 
 button12 = tk.Button(root, text="Riin_printing", command=run_script12)
