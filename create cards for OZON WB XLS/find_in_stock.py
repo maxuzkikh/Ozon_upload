@@ -93,7 +93,7 @@ def find_and_fill_values(file_path, barcode_file_path):
 
 def print_file(file_path):
     # Define printer name
-    printer_name = "Kyocera ECOSYS P2040dn"
+    printer_name = "Kyocera ECOSYS P2040dn KX"
     # Ensure the printer is available
     printers = [printer[2] for printer in win32print.EnumPrinters(2)]
     if printer_name not in printers:
