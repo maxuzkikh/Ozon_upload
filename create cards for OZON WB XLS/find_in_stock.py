@@ -8,6 +8,7 @@ import os
 import win32print
 import win32api
 from tkinter import messagebox, Tk
+import time
 
 def select_excel_file():
     Tk().withdraw()  # Hide the root window
@@ -93,21 +94,20 @@ def find_and_fill_values(file_path, barcode_file_path):
 def print_file(file_path):
     # Define printer name
     printer_name = "Kyocera ECOSYS P2040dn"
-
     # Ensure the printer is available
     printers = [printer[2] for printer in win32print.EnumPrinters(2)]
     if printer_name not in printers:
         print(f"Error: Printer '{printer_name}' not found.")
         return
-
+    time.sleep(1)
     # Open a handle to the printer
     hPrinter = win32print.OpenPrinter(printer_name)
-
+    time.sleep(1)
     # Configure printer settings (landscape or portrait orientation, A4, etc.)
     pdc = win32print.GetPrinter(hPrinter, 2)  # Level 2 info structure
     pdc["pDevMode"].PaperSize = 9  # A4
     pdc["pDevMode"].Orientation = 1  # Portrait (1) or Landscape (2)
-
+    time.sleep(1)
     # Print the file
     try:
         win32api.ShellExecute(
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     copied_excel_file = copy_and_modify_excel(excel_file)
     barcode_file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
     find_and_fill_values(copied_excel_file, barcode_file_path)
-
+    
     # Define printer name
     printer_name = "Kyocera ECOSYS P2040dn"
 

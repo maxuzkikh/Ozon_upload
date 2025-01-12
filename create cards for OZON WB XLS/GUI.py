@@ -120,12 +120,17 @@ def run_script28():
 def run_script29():
     subprocess.Popen(["python", "demand_from_WB2.py"])
 
+def run_script30():
+    subprocess.Popen(["python", "find_place_for_file.py"])
+
+    
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
 
 # Set window size to 500x500
-root.geometry("300x700")
+root.geometry("400x900")
 
 button6 = tk.Button(root, text="photoshop_barcode.py", command=run_script6)
 button6.pack()
@@ -211,7 +216,8 @@ button27.pack()
 button28 = tk.Button(root, text="get_chat_id.py", command=run_script28)
 button28.pack()
 
-
+button30 = tk.Button(root, text="find_place_for_file.py", command=run_script30)
+button30.pack()
 
 
 
