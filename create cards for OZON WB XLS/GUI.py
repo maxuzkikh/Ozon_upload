@@ -16,6 +16,9 @@ def run_script3():
 def run_script23():
     subprocess.Popen(["python", "demand_from_WB_without_my_stock.py"])
 
+def run_script31():
+    subprocess.Popen(["python", "demand_from_WB3.py"])
+
 def run_script4():
     subprocess.Popen(["python", "MainTop_print.py"])
 
@@ -156,6 +159,9 @@ button9.pack()
 button29 = tk.Button(root, text="demand_from_WB учитывая только склад на ВБ", command=run_script29)
 button29.pack()
 
+button31 = tk.Button(root, text="demand_from_WB учитывая только свой склад", command=run_script31)
+button31.pack()
+
 button10 = tk.Button(root, text="demand_from_WB учитывая все склады", command=run_script10)
 button10.pack()
 
@@ -218,6 +224,7 @@ button28.pack()
 
 button30 = tk.Button(root, text="find_place_for_file.py", command=run_script30)
 button30.pack()
+
 
 
 
