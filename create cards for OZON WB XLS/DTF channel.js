@@ -15,8 +15,8 @@ function main() {
 // Function to process each selected file
 function processFile(file) {
     var doc = app.open(file);
-    doc.selection.selectAll();
-    doc.selection.copy(true);
+    //doc.selection.selectAll();
+    //doc.selection.copy(true);
     //app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);
 
     app.doAction("DTF3","Default Actions")
