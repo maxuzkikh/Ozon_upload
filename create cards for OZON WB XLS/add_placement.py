@@ -69,56 +69,69 @@ if bring_window_to_front(window_title):
 else:
     print("Failed to bring the Photoshop window to the front.")
 
-# Process rows 100-102
 for index, row in data.iterrows():
-    if index < 393 or index > 530:  # Adjust as needed
+    if index < 524 or index > 552:  # Замените на нужный диапазон
         continue
 
     pdf_path = row[pdf_path_column]
     place = row[place_column]
     action_value = row[action_column]
+    artikul_value = row.get("Артикул", "")  # Получаем значение из столбца "Артикул"
 
-    # Skip rows where "место" is "--- "
+    # Пропускаем строки, где "место" равно "---"
     if place.strip() == "---":
-        print(f"Skipping row {index + 1} as 'место' is '---'.")
+        print(f"Пропускаем строку {index + 1}, так как 'место' равно '---'.")
         continue
 
-    # Validate the PDF path
+    # Проверяем существование PDF файла
     pdf_path = Path(pdf_path)
     if not pdf_path.is_file():
-        print(f"Invalid or missing file path at row {index + 1}: {pdf_path}")
+        print(f"Неправильный или отсутствующий путь к файлу в строке {index + 1}: {pdf_path}")
         continue
 
     try:
-        # Open the PDF file in Photoshop
-        print(f"Opening file: {pdf_path}")
+        # Открываем PDF файл в Photoshop
+        print(f"Открываем файл: {pdf_path}")
         ps_doc = ps_app.Open(str(pdf_path))
 
-        # Choose the Photoshop action based on the value in "Бренд"
+        # Выбираем действие Photoshop на основе значения в столбце "Бренд"
         if action_value == "Punky Monkey":
             ps_app.DoAction("create_punky", "Default Actions")
         elif action_value == "Amazing Pics":
             ps_app.DoAction("create_amazing", "Default Actions")
         else:
-            print(f"Unknown action for value '{action_value}' at row {index + 1}. Skipping.")
-            ps_doc.Close(2)  # Close without saving
+            print(f"Неизвестное действие для значения '{action_value}' в строке {index + 1}. Пропускаем.")
+            ps_doc.Close(2)  # Закрываем без сохранения
             continue
 
-        # Add text layer with the specified text
-        text_content = f"место: {place}"
-        text_layer = ps_doc.ArtLayers.Add()
-        text_layer.Kind = 2  # Text layer
-        text_layer.TextItem.Contents = text_content
+        # Добавляем текстовый слой с "место"
+        text_content_place = f"место: {place}"
+        text_layer_place = ps_doc.ArtLayers.Add()
+        text_layer_place.Kind = 2  # Текстовый слой
+        text_layer_place.TextItem.Contents = text_content_place
+        text_layer_place.TextItem.Position = [0.6, 3.74]  # Позиция текста (регулируйте при необходимости)
 
-        # Position the text layer in the bottom right corner
-        text_layer.TextItem.Position = [0.6, 3.74]  # Adjust offsets as needed
+        # Перенос текста "Артикул" на новые строки каждые 25 символов
+        if len(artikul_value) > 25:
+            artikul_lines = [artikul_value[i:i+25] for i in range(0, len(artikul_value), 25)]
+            artikul_value = '\r'.join(artikul_lines)  # Используем '\r' вместо '\n' для Photoshop
 
-        # Save and close the file
+
+        # Добавляем текстовый слой с "Артикул"
+        text_layer_artikul = ps_doc.ArtLayers.Add()
+        text_layer_artikul.Kind = 2  # Текстовый слой
+        text_layer_artikul.TextItem.Contents = artikul_value
+        text_layer_artikul.TextItem.Position = [0.2, 2.6]  # Позиция текста (регулируйте при необходимости)
+
+        # Сохраняем и закрываем файл
         save_file_with_pyautogui(str(pdf_path))
-        ps_doc.Close()  # 1 = Save changes and close
+        ps_doc.Close()  # 1 = Сохранить изменения и закрыть
 
     except Exception as e:
-        print(f"Error processing file at row {index + 1}: {e}")
+        print(f"Ошибка обработки файла в строке {index + 1}: {e}")
+
+
+
 
 # Quit Photoshop
 # ps_app.Quit()
