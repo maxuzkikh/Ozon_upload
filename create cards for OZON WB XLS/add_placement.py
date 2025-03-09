@@ -70,7 +70,7 @@ else:
     print("Failed to bring the Photoshop window to the front.")
 
 for index, row in data.iterrows():
-    if index < 524 or index > 552:  # Замените на нужный диапазон
+    if index < 554 or index > 554:  # Замените на нужный диапазон
         continue
 
     pdf_path = row[pdf_path_column]
@@ -121,7 +121,7 @@ for index, row in data.iterrows():
         text_layer_artikul = ps_doc.ArtLayers.Add()
         text_layer_artikul.Kind = 2  # Текстовый слой
         text_layer_artikul.TextItem.Contents = artikul_value
-        text_layer_artikul.TextItem.Position = [0.2, 2.6]  # Позиция текста (регулируйте при необходимости)
+        text_layer_artikul.TextItem.Position = [0.2, 2.8]  # Позиция текста (регулируйте при необходимости)
 
         # Сохраняем и закрываем файл
         save_file_with_pyautogui(str(pdf_path))
