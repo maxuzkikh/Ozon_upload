@@ -113,16 +113,15 @@ os.makedirs(output_dir, exist_ok=True)
 def get_color(cell):
     """Функция для получения цвета ячейки"""
     fill = cell.fill
-    return fill.start_color.rgb if fill.fill_type == "solid" else None
+    return fill.start_color.rgb if fill.fill_type == "solid" else "FFFFFF"  # Если нет цвета, считать белым
 
 # Определяем цвета и строки
 color_groups = {}
 for row in range(2, sheet.max_row + 1):
     color = get_color(sheet.cell(row=row, column=1))
-    if color:
-        if color not in color_groups:
-            color_groups[color] = []
-        color_groups[color].append(row)
+    if color not in color_groups:
+        color_groups[color] = []
+    color_groups[color].append(row)
 
 # Читаем DataFrame
 df_sorted = pd.read_excel(sorted_excel_file_path, engine='openpyxl')
