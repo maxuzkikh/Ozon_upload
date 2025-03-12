@@ -126,6 +126,8 @@ def run_script29():
 def run_script30():
     subprocess.Popen(["python", "find_place_for_file.py"])
 
+def run_script31():
+    subprocess.Popen(["python", "sort_by_cities.py"])
     
 
 root = tk.Tk()
@@ -224,6 +226,9 @@ button28.pack()
 
 button30 = tk.Button(root, text="find_place_for_file.py", command=run_script30)
 button30.pack()
+
+button31 = tk.Button(root, text="sort_by_cities.py", command=run_script31)
+button31.pack()
 
 
 
