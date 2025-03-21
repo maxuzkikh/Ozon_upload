@@ -2,7 +2,7 @@ import pandas as pd
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import os
-
+from tkinter import simpledialog
 
 # Function to calculate 'отправить' column
 def calculate_send(row):
@@ -20,9 +20,26 @@ def calculate_send(row):
         return 0
 
 
+# Prompt user to enter number of days
+Tk().withdraw()
+try:
+    filename = askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+    if not filename:
+        print("No file selected. Exiting.")
+        exit()
+    
+    # Ask user for number of days
+    days_input = simpledialog.askinteger("Период расчета", "Введите количество дней для расчета:", minvalue=1)
+    if days_input is None:
+        print("Период не введён. Выход.")
+        exit()
+except Exception as e:
+    print("Ошибка при выборе файла или вводе дней:", e)
+    exit()
+
 # Function to fill 'дней' column
 def fill_days(row):
-    return 30
+    return days_input
 
 
 # Function to fill 'сумма' column
