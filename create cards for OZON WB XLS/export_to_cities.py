@@ -13,22 +13,32 @@ if not file_path:
 else:
     # Читаем данные, заголовки на первой строке
     df = pd.read_excel(file_path, header=0)
-    
-    # Определяем путь для сохранения
-    save_dir = os.path.dirname(file_path)
-    
-    # Перебираем столбцы начиная со второго
-    for col_name in df.columns[1:]:
-        new_df = df[[df.columns[0], col_name]]  # Берем первый и текущий столбец
-        
-        # Удаляем строки, где значение в текущем столбце или в "Артикул" равно 0
-        new_df = new_df[(new_df.iloc[:, 0] != 0) & (new_df.iloc[:, 1] != 0)]
-        
-        # Переименовываем второй столбец в "Количество"
-        new_df.columns = [df.columns[0], "Количество"]
-        
-        save_path = os.path.join(save_dir, f"{col_name}.xlsx")
+
+    # Определяем путь для сохранения файлов
+    base_dir = os.path.dirname(file_path)
+    save_dir = os.path.join(base_dir, "Поставка по городам")
+
+    # Создаем папку, если ее нет
+    os.makedirs(save_dir, exist_ok=True)
+
+    # Перебираем все столбцы, начиная со второго (первый - это "артикул")
+    for idx, col_name in enumerate(df.columns[1:], start=1):
+        new_df = df[[df.columns[0], col_name]].copy()  # Берем первый и текущий столбец
+
+        # Добавляем пустую колонку "имя (необязательно)"
+        new_df.insert(1, "имя (необязательно)", "")
+
+        # Переименовываем заголовки
+        new_df.columns = ["артикул", "имя (необязательно)", "количество"]
+
+        # Удаляем строки, где количество равно 0 или пусто
+        new_df = new_df[new_df["количество"].notna() & (new_df["количество"] != 0)]
+
+        # Формируем путь для сохранения файла с порядковым номером
+        save_path = os.path.join(save_dir, f"{idx} {col_name}.xlsx")
+
+        # Сохраняем результат
         new_df.to_excel(save_path, index=False)
         print(f"Файл сохранен: {save_path}")
-    
-    print("Обработка завершена.")
+
+    print(f"Обработка завершена. Все файлы сохранены в папке: {save_dir}")
