@@ -35,6 +35,10 @@ def run_script8():
     subprocess.Popen(["python", "find_barcode_from_file.py"])
 def run_script9():
     subprocess.Popen(["python", "sort_by_type.py"])
+
+def run_script33():
+    subprocess.Popen(["python", "combine_pdf.py"])
+
 def run_script10():
     subprocess.Popen(["python", "demand_from_WB.py"])
 
@@ -229,6 +233,9 @@ button30.pack()
 
 button32 = tk.Button(root, text="sort_by_cities.py", command=run_script31)
 button31.pack()
+
+button33 = tk.Button(root, text="combine excel list to pdf barcode", command=run_script33)
+button33.pack()
 
 
 

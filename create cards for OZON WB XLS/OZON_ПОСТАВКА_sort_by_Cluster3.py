@@ -79,7 +79,9 @@ def round_up(value, multiple):
 final_table["Num_Copies"] = final_table.apply(
     lambda row: round_up(row["всего"], 2) if row["тип упорядочить"].startswith("1_а4") or row["тип упорядочить"].startswith("6_а4_настройки_60")
     else round_up(row["всего"], 4) if row["тип упорядочить"].startswith("2_а5")
+    else round_up(row["всего"], 2) if row["тип упорядочить"].startswith("3_термобирки")
     else row["всего"], axis=1)
+
 
 final_table["осталось"] = final_table["Num_Copies"] - final_table["всего"]
 
