@@ -64,10 +64,12 @@ def main():
     if articul_column in df.columns and copies_column in df.columns and articul_column in barcode_df.columns and path_column in barcode_df.columns:
         # Create a copy of the Template - RIIN file with a timestamp
         original_template_path = r"C:\work\Template30cm.rcf"
-        timestamp = datetime.now().strftime("data%d.%m.%Y_time%H.%M")
-        new_template_path = f"C:\\work\\Template30cm_{timestamp}.rcf"
+        filename = os.path.splitext(os.path.basename(excel_path))[0]
+        timestamp = f"{filename}_{datetime.now().strftime('data%d.%m.%Y_time%H.%M')}"
+        new_template_path = f"C:\\work\\{timestamp}.rcf"
         shutil.copy(original_template_path, new_template_path)
         print(f"Copied Template30cm.rcf to {new_template_path}")
+
 
         # Open the copied Template - RIIN file with the default application
         print("Opening the copied Template - RIIN file...")
