@@ -80,7 +80,7 @@ def main():
         time.sleep(8)
 
         # Format the window title to include the actual timestamp
-        window_title = f"Template30cm_{timestamp} - RIIN"
+        window_title = f"{timestamp} - RIIN"
         print(f"Searching for the window '{window_title}'...")
         window = gw.getWindowsWithTitle(window_title)
 
