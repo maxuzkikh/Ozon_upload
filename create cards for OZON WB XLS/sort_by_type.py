@@ -27,8 +27,10 @@ if "Тип упорядочить" not in df_barcode.columns:
     raise KeyError("Не найдена колонка 'Тип упорядочить' в barcode-файле")
 
 # Объединение и сортировка
-df_barcode_sorted = df_barcode.sort_values(by="Тип упорядочить")
-merged_df = pd.merge(df_main, df_barcode_sorted, on="Артикул")
+merged_df = pd.merge(df_main, df_barcode, on="Артикул")
+merged_df = merged_df.sort_values(by=["Тип упорядочить", "Num_Copies"], ascending=[True, False])
+
+
 merged_df = merged_df[merged_df['Num_Copies'] != 0]
 
 # Корректировка Num_Copies
@@ -73,13 +75,25 @@ for row in range(2, sheet.max_row + 1):
     if copies is not None:
         sum_counter += copies
         group_rows.append(row)
-    if 350 <= sum_counter <= 380:
+
+    # Если сумма копий превысила 350 — формируем группу
+    if sum_counter >= 350:
         color = fill_colors[color_index]
+        print(f"🟩 Формируется группа с суммой {sum_counter} из строк: {group_rows}")
         for r in group_rows:
             for c in range(1, sheet.max_column + 1):
                 sheet.cell(row=r, column=c).fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
         sum_counter, group_rows = 0, []
         color_index = (color_index + 1) % len(fill_colors)
+
+# Добавить оставшиеся строки (если остались) в отдельную группу
+if group_rows:
+    color = fill_colors[color_index]
+    print(f"🟨 Остаточная группа с суммой {sum_counter} из строк: {group_rows}")
+    for r in group_rows:
+        for c in range(1, sheet.max_column + 1):
+            sheet.cell(row=r, column=c).fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+
 
 for r in special_rows:
     for c in range(1, sheet.max_column + 1):
