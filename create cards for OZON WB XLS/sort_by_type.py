@@ -102,6 +102,11 @@ for r in special_rows:
     for c in range(1, sheet.max_column + 1):
         sheet.cell(row=r, column=c).fill = PatternFill(start_color=special_fill, end_color=special_fill, fill_type="solid")
 
+if special_rows:
+    all_groups.append(special_rows[:])
+    print(f"📌 Добавлена спец-группа с {len(special_rows)} строками типа '6_а4_настройки_60'")
+
+
 wb.save(sorted_path)
 
 # Чтение окрашенного файла
