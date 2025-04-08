@@ -22,15 +22,12 @@ barcode_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path bar
 df_main = pd.read_excel(excel_file_path)
 df_barcode = pd.read_excel(barcode_path)
 
-# Проверка колонок
 if "Тип упорядочить" not in df_barcode.columns:
     raise KeyError("Не найдена колонка 'Тип упорядочить' в barcode-файле")
 
 # Объединение и сортировка
 merged_df = pd.merge(df_main, df_barcode, on="Артикул")
 merged_df = merged_df.sort_values(by=["Тип упорядочить", "Num_Copies"], ascending=[True, False])
-
-
 merged_df = merged_df[merged_df['Num_Copies'] != 0]
 
 # Корректировка Num_Copies
@@ -47,15 +44,13 @@ columns_to_keep = [col for col in columns_to_keep if col in merged_df.columns]
 sorted_path = excel_file_path.replace('.xlsx', '_sorted.xlsx')
 merged_df[columns_to_keep].to_excel(sorted_path, index=False, engine='openpyxl')
 
-# Окрашивание Excel
+# Окрашивание Excel + Формирование групп
 wb = load_workbook(sorted_path)
 sheet = wb.active
 fill_colors = ["FFFF99", "99CCFF", "FFCCCC", "CCFFCC", "CCCCFF"]
 special_fill = "FFA07A"
-color_index = 0
-sum_counter, group_rows, special_rows = 0, [], []
 
-# Индексы колонок
+# Найти номера колонок
 num_col = None
 type_col = None
 for col in range(1, sheet.max_column + 1):
@@ -65,62 +60,61 @@ for col in range(1, sheet.max_column + 1):
     elif val == "Тип упорядочить":
         type_col = col
 
-# Окраска строк
+MAX_GROUP = 350
+sum_counter = 0
+group_rows = []
+color_index = 0
+special_rows = []
+all_groups = []
+
 for row in range(2, sheet.max_row + 1):
     copies = sheet.cell(row=row, column=num_col).value
     group_type = sheet.cell(row=row, column=type_col).value
+
     if group_type == "6_а4_настройки_60":
         special_rows.append(row)
         continue
+
     if copies is not None:
+        if sum_counter + copies > MAX_GROUP:
+            color = fill_colors[color_index]
+            for r in group_rows:
+                for c in range(1, sheet.max_column + 1):
+                    sheet.cell(row=r, column=c).fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+            all_groups.append(group_rows[:])
+            group_rows = []
+            sum_counter = 0
+            color_index = (color_index + 1) % len(fill_colors)
+
         sum_counter += copies
         group_rows.append(row)
 
-    # Если сумма копий превысила 350 — формируем группу
-    if sum_counter >= 350:
-        color = fill_colors[color_index]
-        print(f"🟩 Формируется группа с суммой {sum_counter} из строк: {group_rows}")
-        for r in group_rows:
-            for c in range(1, sheet.max_column + 1):
-                sheet.cell(row=r, column=c).fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-        sum_counter, group_rows = 0, []
-        color_index = (color_index + 1) % len(fill_colors)
-
-# Добавить оставшиеся строки (если остались) в отдельную группу
+# Последняя группа
 if group_rows:
     color = fill_colors[color_index]
-    print(f"🟨 Остаточная группа с суммой {sum_counter} из строк: {group_rows}")
     for r in group_rows:
         for c in range(1, sheet.max_column + 1):
             sheet.cell(row=r, column=c).fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
+    all_groups.append(group_rows[:])
 
-
+# Спец-группа
 for r in special_rows:
     for c in range(1, sheet.max_column + 1):
         sheet.cell(row=r, column=c).fill = PatternFill(start_color=special_fill, end_color=special_fill, fill_type="solid")
 
 wb.save(sorted_path)
 
-# Группировка по цвету
-def get_cell_color(cell):
-    fill = cell.fill
-    return fill.start_color.rgb if fill.fill_type == "solid" else "FFFFFF"
-
-color_groups = {}
-for row in range(2, sheet.max_row + 1):
-    color = get_cell_color(sheet.cell(row=row, column=1))
-    color_groups.setdefault(color, []).append(row)
-
+# Чтение окрашенного файла
 df_sorted = pd.read_excel(sorted_path, engine='openpyxl')
 
-# Для каждой группы создаём Excel и объединённый PDF
-for idx, (color, rows) in enumerate(color_groups.items(), start=1):
-    df_group = df_sorted.iloc[[r - 2 for r in rows]]
+# Экспорт групп
+for idx, group in enumerate(all_groups, start=1):
+    df_group = df_sorted.iloc[[r - 2 for r in group]]  # Excel → DataFrame index
     p_file = os.path.join(output_dir, f"p{idx}.xlsx")
     df_group.to_excel(p_file, index=False, engine='openpyxl')
     print(f"✅ Группа {idx} экспортирована: {p_file}")
 
-    # Теперь combine_pdf для каждой группы
+    # Объединение PDF
     df_paths = pd.read_excel(barcode_path)
     df_merged = pd.merge(df_group, df_paths[['Артикул', 'Local_PDF_Path_Column_Name']], on='Артикул', how='left')
 
