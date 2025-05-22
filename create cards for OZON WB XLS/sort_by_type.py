@@ -6,6 +6,7 @@ from tkinter import Tk, filedialog
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
+from pathlib import Path
 
 def run():
     # Выбор Excel-файла
@@ -16,8 +17,14 @@ def run():
 
     output_dir = os.path.dirname(excel_file_path)
 
+        # Получаем путь к текущему скрипту
+    current_dir = Path(__file__).parent
+
+    # Формируем путь к файлу относительно текущей директории
+    barcode_path = current_dir.parent / "barcode" / "Data path barcode.xlsx"
     # Пути к данным
-    barcode_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
+    barcode_path = "../barcode/Data path barcode.xlsx"
+
 
     # Чтение файлов
     df_main = pd.read_excel(excel_file_path)
