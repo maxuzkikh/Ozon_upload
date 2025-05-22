@@ -1,8 +1,11 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, simpledialog, messagebox
 import subprocess
 import os
 import win32com.client
+import requests
+import sys
+import sort_by_type
 
 def run_script20():
     subprocess.Popen(["python", "generate_import_Ozon.py"])
@@ -33,8 +36,8 @@ def run_script7():
 
 def run_script8():
     subprocess.Popen(["python", "find_barcode_from_file.py"])
-def run_script9():
-    subprocess.Popen(["python", "sort_by_type.py"])
+#def run_script9():
+    #subprocess.Popen(["python", "sort_by_type.py"])
 
 def run_script33():
     subprocess.Popen(["python", "combine_pdf.py"])
@@ -134,6 +137,34 @@ def run_script32():
     subprocess.Popen(["python", "sort_by_cities.py"])
     
 
+# === Проверка пароля через Google Sheets ===
+GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwgxVIPgLIEO_RUbp79GUkhem9sSNf2RTx2lp9EzuChZkgv-dnVekUdyz1B6_eiWCSg/exec"  # вставь свою ссылку
+
+def get_expected_password():
+    try:
+        r = requests.get(GOOGLE_SHEETS_URL, timeout=5)
+        return r.text.strip()
+    except:
+        return None
+
+def request_password():
+    temp_root = tk.Tk()
+    temp_root.withdraw()
+    pw = simpledialog.askstring("Доступ", "Введите пароль на сегодня:")
+    temp_root.destroy()
+    return pw
+
+expected_password = get_expected_password()
+entered_password = request_password()
+
+if expected_password is None or expected_password == "INVALID":
+    messagebox.showerror("Ошибка", "Не удалось подключиться к серверу.")
+    sys.exit()
+
+if entered_password != expected_password:
+    messagebox.showerror("Ошибка", "Неверный пароль.")
+    sys.exit()
+
 root = tk.Tk()
 root.title("Python Script Runner")
 
@@ -159,7 +190,7 @@ button7 = tk.Button(root, text="find_barcode_for_WB", command=run_script7)
 button7.pack()
 
 
-button9 = tk.Button(root, text="sort_by_type", command=run_script9)
+button9 = tk.Button(root, text="Сортировка + PDF", command=sort_by_type.run)
 button9.pack()
 
 button29 = tk.Button(root, text="demand_from_WB учитывая только склад на ВБ", command=run_script29)
