@@ -246,6 +246,15 @@ def main():
             print("Align to Center Button")
             pyautogui.click(665, 940)
             time.sleep(0.4)
+
+            #save file
+            time.sleep(2)
+            # Simulate Ctrl+S to save
+            pyautogui.hotkey('ctrl', 's')
+            time.sleep(2)
+            # Simulate Enter key to confirm save
+            pyautogui.press('enter')
+
             #messagebox.showinfo("Process Complete", "Delete LINES GUIEDS or it will be printed! Process Complete")
             #print
             pyautogui.click(133, 59)
