@@ -8,6 +8,7 @@ from openpyxl.styles import PatternFill
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 from pathlib import Path
 
+
 def run():
     # Выбор Excel-файла
     Tk().withdraw()
@@ -137,7 +138,16 @@ def run():
 
         merger = PdfMerger()
         for _, row in df_merged.iterrows():
-            pdf_path = row['Local_PDF_Path_Column_Name']
+
+            relative_path = row['Local_PDF_Path_Column_Name']
+            path_obj = Path(relative_path)
+
+            if not path_obj.is_absolute():
+                pdf_path = Path.home() / path_obj
+            else:
+                pdf_path = path_obj
+
+            pdf_path = str(pdf_path)
             num_copies = int(row['Num_Copies'])
 
             if not os.path.isfile(pdf_path):
