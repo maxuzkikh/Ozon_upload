@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import filedialog
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 import io
+from pathlib import Path
 
 # Выбор Excel-файла
 root = tk.Tk()
@@ -17,7 +18,15 @@ if not excel_file_path:
 
 # Загрузка таблиц
 df_list = pd.read_excel(excel_file_path)
-barcode_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
+output_dir = os.path.dirname(excel_file_path)
+
+# Получаем путь к текущему скрипту
+current_dir = Path(__file__).parent
+
+# Формируем путь к файлу относительно текущей директории
+barcode_path = current_dir.parent / "barcode" / "Data path barcode.xlsx"
+
+# barcode_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
 df_paths = pd.read_excel(barcode_path)
 
 # Объединение по "Артикул"
