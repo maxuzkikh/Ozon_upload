@@ -26,7 +26,7 @@ aggregated_data = data.groupby(["артикул", "кластер"], as_index=Fa
 aggregated_data = aggregated_data.sort_values(by=["кластер", "количество"], ascending=[True, False])
 
 # Добавление колонки "место" из файла с путями
-barcode_file_path = "C:/Users/Max/Documents/GitHub/Ozon_upload/barcode/Data path barcode.xlsx"
+barcode_file_path = "C:/Users/maxim/Documents/GitHub/Ozon_upload/barcode/Data path barcode.xlsx"
 barcode_data = pd.read_excel(barcode_file_path)
 
 # Приведение имен колонок к общему виду
@@ -37,7 +37,7 @@ aggregated_data.columns = aggregated_data.columns.str.strip().str.lower()
 aggregated_data = aggregated_data.merge(barcode_data[["артикул", "место"]], on="артикул", how="left")
 
 # Сохраняем промежуточный результат в файл
-intermediate_file = "C:/Users/Max/Documents/GitHub/Ozon_upload/barcode/intermediate_result.xlsx"
+intermediate_file = "C:/Users/maxim/Documents/GitHub/Ozon_upload/barcode/intermediate_result.xlsx"
 aggregated_data.to_excel(intermediate_file, index=False)
 
 # Читаем сохраненный результат для дальнейшей обработки

@@ -128,7 +128,7 @@ def print_file(file_path):
 if __name__ == "__main__":
     excel_file = select_excel_file()
     copied_excel_file = copy_and_modify_excel(excel_file)
-    barcode_file_path = r"C:\Users\Max\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
+    barcode_file_path = r"C:\Users\maxim\Documents\GitHub\Ozon_upload\barcode\Data path barcode.xlsx"
     find_and_fill_values(copied_excel_file, barcode_file_path)
     
     # Define printer name
