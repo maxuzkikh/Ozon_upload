@@ -80,7 +80,7 @@ def run():
         copies = sheet.cell(row=row, column=num_col).value
         group_type = sheet.cell(row=row, column=type_col).value
 
-        if group_type == "6_а4_настройки_60":
+        if group_type in ["6_а4_настройки_60", "6_а5_настройки_60"]:
             special_rows.append(row)
             continue
 
