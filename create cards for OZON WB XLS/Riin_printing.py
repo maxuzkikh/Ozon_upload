@@ -8,8 +8,81 @@ import pyperclip
 from tkinter import Tk, filedialog
 import shutil
 from datetime import datetime
+import ctypes
 
-from tkinter import messagebox
+import tkinter as tk
+from tkinter import simpledialog, messagebox
+import requests
+import sys
+import keyboard
+
+def focus_current_window():
+    win = gw.getActiveWindow()
+    if win:
+        win.activate()
+        time.sleep(0.3)
+
+
+LANG_RUSSIAN = 0x419
+LANG_ENGLISH = 0x409
+user32 = ctypes.WinDLL('user32', use_last_error=True)
+
+def get_current_keyboard_layout():
+    hwnd = user32.GetForegroundWindow()
+    thread_id = user32.GetWindowThreadProcessId(hwnd, 0)
+    layout_id = user32.GetKeyboardLayout(thread_id)
+    language_id = layout_id & (2**16 - 1)
+    return language_id
+
+def switch_to_english_if_needed():
+    print("Пробую принудительно переключить раскладку на английскую (США)...")
+
+    # Загружаем английскую раскладку (США) — 00000409
+    hkl = user32.LoadKeyboardLayoutW("00000409", 1)
+    if not hkl:
+        print("Ошибка: не удалось загрузить английскую раскладку")
+        return
+
+    # Активируем раскладку
+    result = user32.ActivateKeyboardLayout(hkl, 0)
+    time.sleep(0.5)
+
+    # Проверка результата
+    current_lang = get_current_keyboard_layout()
+    print(f"Текущая раскладка после переключения: {'РУССКАЯ' if current_lang == LANG_RUSSIAN else 'АНГЛИЙСКАЯ'}")
+
+
+
+
+       
+# === Проверка пароля через Google Sheets ===
+GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwgxVIPgLIEO_RUbp79GUkhem9sSNf2RTx2lp9EzuChZkgv-dnVekUdyz1B6_eiWCSg/exec"  # замени на свою
+
+def get_expected_password():
+    try:
+        r = requests.get(GOOGLE_SHEETS_URL, timeout=5)
+        return r.text.strip()
+    except:
+        return None
+
+def request_password():
+    temp_root = tk.Tk()
+    temp_root.withdraw()
+    pw = simpledialog.askstring("Доступ", "Введите пароль на сегодня:")
+    temp_root.destroy()
+    return pw
+
+expected_password = get_expected_password()
+entered_password = request_password()
+
+if expected_password is None or expected_password == "INVALID":
+    messagebox.showerror("Ошибка", "Не удалось подключиться к серверу.")
+    sys.exit()
+
+if entered_password != expected_password:
+    messagebox.showerror("Ошибка", "Неверный пароль.")
+    sys.exit()
+
 
 
 def choose_excel_file():
@@ -38,6 +111,10 @@ def ensure_correct_file_extension(file_path, expected_extension=".tif"):
 
 
 def main():
+    focus_current_window()
+    switch_to_english_if_needed()
+    print("Раскладка проверена и переключена (если нужно)")
+
     # Prompt the user to choose the first Excel file
     excel_path = choose_excel_file()
 
