@@ -1,6 +1,6 @@
 //Maya ASCII 2023 scene
-//Name: 3d_cutter_023.ma
-//Last modified: Thu, Aug 14, 2025 10:52:05 AM
+//Name: 3d_cutter_024.ma
+//Last modified: Thu, Aug 14, 2025 02:17:04 PM
 //Codeset: 1251
 requires maya "2023";
 requires -nodeType "polyBoolean" "polyBoolean" "1.1";
@@ -11,12 +11,12 @@ fileInfo "product" "Maya 2023";
 fileInfo "version" "2023";
 fileInfo "cutIdentifier" "202208031415-1dee56799d";
 fileInfo "osv" "Windows 11 Home v2009 (Build: 22000)";
-fileInfo "UUID" "33C57E93-4956-4FC5-A522-128A8699CFD2";
+fileInfo "UUID" "6DFAB422-4F9E-EDEC-AEA1-1B81CCEBBB56";
 createNode transform -s -n "persp";
 	rename -uid "A63CA5FC-4167-2DFB-D7E4-9AB5A0864953";
 	setAttr ".v" no;
-	setAttr ".t" -type "double3" -571.36553671724278 -375.01707451627499 619.67442544338644 ;
-	setAttr ".r" -type "double3" 44.482924878900519 0 -1498.0050383004555 ;
+	setAttr ".t" -type "double3" -65.220256202964649 -55.837565341029638 50.425411444578764 ;
+	setAttr ".r" -type "double3" 60.682924878902156 3.1805546814635176e-15 -1482.8050560099684 ;
 	setAttr ".rp" -type "double3" 1.0391687510491465e-13 -9.170442183403793e-14 7.2759576141834259e-12 ;
 	setAttr ".rpt" -type "double3" 2.7643729701941182e-13 -5.5677613092685216e-12 -2.7169504894321759e-12 ;
 createNode camera -s -n "perspShape" -p "persp";
@@ -24,11 +24,11 @@ createNode camera -s -n "perspShape" -p "persp";
 	setAttr -k off ".v" no;
 	setAttr ".pze" yes;
 	setAttr ".fl" 34.999999999999979;
-	setAttr ".coi" 858.30052575738296;
+	setAttr ".coi" 57.314280680604668;
 	setAttr ".imn" -type "string" "persp";
 	setAttr ".den" -type "string" "persp_depth";
 	setAttr ".man" -type "string" "persp_mask";
-	setAttr ".tp" -type "double3" -18.003110885620117 195 24 ;
+	setAttr ".tp" -type "double3" -42.500000572204591 0 28.201557445526124 ;
 	setAttr ".hc" -type "string" "viewSet -p %camera";
 createNode transform -s -n "top";
 	rename -uid "F1A9F2A1-49C4-9673-5E8E-6EBBFCC6364F";
@@ -26534,7 +26534,7 @@ createNode transform -n "pCylinder69" -p "group73";
 	setAttr ".ovrgbf" yes;
 	setAttr ".ovrgb" -type "float3" 0.85882354 0.58039218 0.33725491 ;
 	setAttr ".t" -type "double3" -42.5 0 29.501558303833008 ;
-	setAttr ".s" -type "double3" 4.8 25 4.8 ;
+	setAttr ".s" -type "double3" 4.8 22 4.8 ;
 createNode mesh -n "pCylinderShape69" -p "pCylinder69";
 	rename -uid "3BF9C39C-49E1-FBED-885B-F085F5CAD349";
 	setAttr -k off ".v";
@@ -33265,7 +33265,7 @@ createNode transform -n "pCylinder76";
 	rename -uid "8F9BD1AA-4347-F948-9792-4FBA439BADEE";
 	setAttr ".ovrgbf" yes;
 	setAttr ".ovrgb" -type "float3" 0.74117649 0.74117649 0.74117649 ;
-	setAttr ".t" -type "double3" -42.5 -20 29.801557540893555 ;
+	setAttr ".t" -type "double3" -42.5 -18 29.801557540893555 ;
 	setAttr ".r" -type "double3" 90 0 90 ;
 	setAttr ".s" -type "double3" 1.95 12.351372828367667 1.95 ;
 createNode mesh -n "pCylinderShape76" -p "pCylinder76";
@@ -33290,7 +33290,7 @@ createNode transform -n "pCylinder77";
 	rename -uid "C9EC8952-43FC-BED2-3DAC-30BF2AC3DAA7";
 	setAttr ".ovrgbf" yes;
 	setAttr ".ovrgb" -type "float3" 0.74117649 0.74117649 0.74117649 ;
-	setAttr ".t" -type "double3" -42.5 20 29.801557540893555 ;
+	setAttr ".t" -type "double3" -42.5 18 29.801557540893555 ;
 	setAttr ".r" -type "double3" 90 0 90 ;
 	setAttr ".s" -type "double3" 1.95 12.351372828367667 1.95 ;
 createNode mesh -n "pCylinderShape77" -p "pCylinder77";
@@ -46168,4 +46168,4 @@ connectAttr "groupId367.msg" ":initialShadingGroup.gn" -na;
 connectAttr "groupId369.msg" ":initialShadingGroup.gn" -na;
 connectAttr "groupId371.msg" ":initialShadingGroup.gn" -na;
 connectAttr "groupId372.msg" ":initialShadingGroup.gn" -na;
-// End of 3d_cutter_023.ma
+// End of 3d_cutter_024.ma
