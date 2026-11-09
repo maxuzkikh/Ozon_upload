@@ -18,7 +18,7 @@ function processFile(file) {
     app.open(file);
     
     // Выполняем действие
-    app.doAction("DTF3", "Default Actions");
+    app.doAction("DTF", "Default Actions");
     
     // Создаем выходную папку, если её нет
     var outputFolder = new Folder(file.parent + "/DTF_output");
