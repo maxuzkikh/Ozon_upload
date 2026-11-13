@@ -9,7 +9,7 @@ import pyperclip
 
 # ============================ НАСТРОЙКИ ============================
 
-SITE_URL = "https://giga.chat/sessions/01a1d398-e7d9-788f-9c76-ee95c67fe7fb"
+SITE_URL = "https://giga.chat/sessions/01a1d478-28b8-7216-8f52-93743f551688"
 
 CLICK_UPLOAD = (803, 917)        
 CLICK_UPLOAD_2 = (829, 824)      
@@ -24,7 +24,7 @@ WAIT_BEFORE_ENTER = 2
 START_DELAY = 3
 
 # Значение по умолчанию; реальное берётся из окна выбора
-DEFAULT_WAIT_AFTER_EACH_IMAGE = 100
+DEFAULT_WAIT_AFTER_EACH_IMAGE = 110
 
 MESSAGE_TEXT = "сделай в стиле вышивки"
 
